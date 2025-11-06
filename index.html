@@ -1,146 +1,163 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Stavningsläxa</title>
-<meta name="theme-color" content="#0a84ff">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-512.png">
-<style>
-  :root{ --bg:#ffffff; --fg:#0d1321; --muted:#6b7280; --accent:#0a84ff; --ok:#2db55d; --err:#d32f2f; --card:#f8fafc; }
-  *{ box-sizing:border-box }
-  html,body{ margin:0; padding:0; background:var(--bg); color:var(--fg); font-family:-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif }
-  .wrap{ max-width:820px; margin:0 auto; padding:24px 16px 56px }
-  header{ display:flex; align-items:flex-start; gap:12px; }
-  .logo{ width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#0a84ff,#66b2ff); box-shadow:0 6px 18px rgba(10,132,255,.25); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800 }
-  h1{ margin:0; font-size:26px; line-height:1.15; color:var(--accent) }
-  .sub{ color:var(--muted); margin-top:2px; font-size:14px }
-  .board{ margin-top:16px; display:flex; gap:10px; flex-wrap:wrap }
-  .chip{ background:#eef2ff; color:#102a63; border:1px solid #dbe3ff; padding:6px 12px; border-radius:999px; font-weight:600; font-size:12px }
-  .card{ background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:18px; margin-top:14px; box-shadow:0 1px 0 rgba(2,6,23,.03) }
-  .def{ font-size:20px; margin:4px 0 12px; min-height:48px }
-  input[type=text]{ width:100%; font-size:20px; padding:14px 12px; border-radius:12px; border:1px solid #d1d5db; background:#fff; outline:none }
-  input[type=text]:focus{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(10,132,255,.15) }
-  .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px }
-  button{ border:none; border-radius:12px; padding:14px 16px; font-weight:800; font-size:16px; cursor:pointer }
-  .primary{ background:var(--accent); color:#fff }
-  .feedback{ min-height:24px; margin-top:8px; font-weight:800 }
-  .ok{ color:var(--ok) } .err{ color:var(--err) }
-  .done{ border:2px dashed #a7e5b7; background:#f2fff5; text-align:center; padding:20px; border-radius:16px; margin-top:16px }
-  .done h2{ margin:0 0 6px; font-size:22px }
-  .small{ color:var(--muted); font-size:13px }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Viljas Läxapp – Engelska glosor</title>
+  <style>
+    :root{ --bg:#f7f7f9; --fg:#111; --ok:#16a34a; --bad:#b91c1c; --card:#ffffff; --border:#e5e7eb; --accent:#111827 }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--fg); display:grid; place-items:center; padding:14px}
+    .app{ width:min(720px,100%); background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow:0 8px 30px rgba(0,0,0,.05)}
+    header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+    h1{font-size:22px; margin:0}
+    #score{font-weight:700}
+    .sv{font-size:44px; font-weight:800; letter-spacing:.5px; margin:6px 0 14px}
+    input[type="text"]{ width:100%; font-size:32px; padding:16px; border-radius:14px; border:1px solid var(--border); outline:none; -webkit-appearance:none; appearance:none }
+    input[type="text"]:focus{ border-color:#9ca3af }
+    .row{display:flex; gap:10px; margin-top:14px}
+    button{ cursor:pointer; border:1px solid var(--border); background:var(--accent); color:#fff; border-radius:14px; padding:16px 18px; font-size:20px; flex:1; -webkit-tap-highlight-color:transparent }
+    button.ghost{ background:#fff; color:#111 }
+    .feedback{ min-height:40px; margin-top:12px; font-weight:800; font-size:24px }
+    .ok{ color:var(--ok)} .bad{ color:var(--bad)}
+    .progress{ height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 0 }
+    .progress>i{display:block;height:100%;width:0;background:#111827}
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">SL</div>
-    <div>
-      <h1>Hej! 🌟</h1>
-      <div class="sub">Dagens runda: klara alla ord minst en gång.</div>
-    </div>
-  </header>
+  <main class="app" role="application">
+    <header>
+      <h1>Viljas läxapp</h1>
+      <div id="score">0 / 0</div>
+    </header>
 
-  <div class="board">
-    <div class="chip">Framsteg idag: <span id="progress">0/0</span></div>
-    <div class="chip">Rätt i rad: <span id="streak">0</span></div>
-  </div>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
 
-  <div id="practice" class="card">
-    <div id="def" class="def">—</div>
-    <input id="answer" type="text"
-           placeholder="Skriv ordet …"
-           autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="latin">
-    <div class="row">
-      <button id="check" type="button" class="primary">Kolla</button>
-    </div>
-    <div id="feedback" class="feedback"></div>
-  </div>
+    <section aria-live="polite">
+      <div class="sv" id="sv"></div>
+      <input id="answer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="latin" enterkeyhint="done" />
 
-  <div id="done" class="done" style="display:none">
-    <h2>Fantastiskt! 🎉</h2>
-    <div>Alla ord i dagens runda är klara.</div>
-    <div class="row" style="justify-content:center; margin-top:12px">
-      <button id="again" type="button" class="primary">Kör en runda till</button>
-    </div>
-    <div class="small" style="margin-top:8px">Grymt jobbat! 💙</div>
-  </div>
-</div>
+      <div class="row" id="actionRow">
+        <button id="check">Kontrollera</button>
+        <button class="ghost" id="hint">Ledtråd</button>
+      </div>
 
-<script>
-// Byt orden här när du vill uppdatera läxan
-const WORDS = [
-  { w:"pengar", d:"Allmänna medel vi betalar med, både sedlar och digitalt." },
-  { w:"kontanter", d:"Fysiska pengar: sedlar och mynt." },
-  { w:"inkomst", d:"Pengar som kommer in, t.ex. lön eller ersättning." },
-  { w:"skatt", d:"Pengar man betalar till staten/kommunen för gemensam nytta." },
-  { w:"budget", d:"Plan för inkomster och utgifter så pengarna räcker." },
-  { w:"lungor", d:"Organen vi andas med, tar upp syre till blodet." },
-  { w:"luftrör", d:"Rör som leder luft till och från lungorna." },
-  { w:"koldioxid", d:"Gas (CO₂) vi andas ut; bildas när kroppen använder energi." },
-  { w:"svalg", d:"Delen längst bak i mun och hals där luft och mat passerar." }
-];
+      <div class="row" id="resultRow" style="display:none">
+        <button class="ghost" id="listen">Lyssna igen</button>
+        <button id="next">Nästa ord</button>
+      </div>
 
-(function forceNoIOSPredict(){
-  const a = document.getElementById("answer");
-  ["autocorrect","autocomplete","autocapitalize","spellcheck"].forEach(attr=>{
-    a.setAttribute(attr, attr==="spellcheck" ? "false" : "off");
-  });
-  a.setAttribute("inputmode","latin");
-})();
+      <div class="feedback" id="feedback"></div>
+    </section>
+  </main>
 
-const KEY = "stavningslaxa_state_v1";
-function today(){ return new Date().toISOString().slice(0,10); }
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  <script>
+    // Ordlistan (från fotot)
+    const WORDS = [
+      { sv: 'Hus', en: 'house' },
+      { sv: 'Tak', en: 'roof' },
+      { sv: 'Skorsten', en: 'chimney' },
+      { sv: 'Fönster', en: 'windows' },
+      { sv: 'Bredvid', en: 'beside' },
+      { sv: 'Höger', en: 'right' },
+      { sv: 'Gång / stig', en: 'path' },
+      { sv: 'Trädgård', en: 'garden' },
+      { sv: 'Trä', en: 'wood' },
+      { sv: 'Sten', en: 'stone' },
+    ];
 
-let state = JSON.parse(localStorage.getItem(KEY) || "{}");
-function resetDay(){
-  state = { date: today(), order: shuffle(WORDS.map(o=>o.w)), done: [], streak:0 };
-  localStorage.setItem(KEY, JSON.stringify(state));
-}
-if(state.date !== today() || !Array.isArray(state.order) || !Array.isArray(state.done)){ resetDay(); }
+    const svEl = document.getElementById('sv');
+    const input = document.getElementById('answer');
+    const checkBtn = document.getElementById('check');
+    const hintBtn = document.getElementById('hint');
+    const feedback = document.getElementById('feedback');
+    const scoreEl = document.getElementById('score');
+    const bar = document.getElementById('bar');
+    const resultRow = document.getElementById('resultRow');
+    const actionRow = document.getElementById('actionRow');
+    const listenBtn = document.getElementById('listen');
+    const nextBtn = document.getElementById('next');
 
-const defEl = document.getElementById("def");
-const ansEl = document.getElementById("answer");
-const fbEl = document.getElementById("feedback");
-const progEl = document.getElementById("progress");
-const streakEl = document.getElementById("streak");
-const practice = document.getElementById("practice");
-const doneBox = document.getElementById("done");
-const checkBtn = document.getElementById("check");
-const againBtn = document.getElementById("again");
+    let deck = shuffle([...WORDS]);
+    let index = 0;
+    let correct = 0;
 
-let current = null;
-function updateUI(){ progEl.textContent = `${state.done.length}/${WORDS.length}`; streakEl.textContent = state.streak || 0; }
-function pickNext(){
-  if(state.order.length === 0){ practice.style.display="none"; doneBox.style.display="block"; return; }
-  const w = state.order[state.order.length - 1];
-  current = WORDS.find(o => o.w === w);
-  defEl.textContent = current ? current.d : "—";
-  ansEl.value = ""; fbEl.textContent = ""; fbEl.className = "feedback";
-  requestAnimationFrame(()=>ansEl.focus()); updateUI();
-}
-function correct(){
-  fbEl.textContent = "Rätt! 🎉"; fbEl.className = "feedback ok";
-  state.streak = (state.streak||0) + 1; state.done.push(current.w); state.order.pop();
-  localStorage.setItem(KEY, JSON.stringify(state)); updateUI();
-  setTimeout(pickNext, 1500);
-}
-function wrong(){
-  fbEl.innerHTML = `Nästan! Rätt svar är <strong>"${current.w}"</strong>`; fbEl.className = "feedback err";
-  state.streak = 0; localStorage.setItem(KEY, JSON.stringify(state)); updateUI();
-}
-function check(){
-  const v = (ansEl.value||"").trim().toLowerCase();
-  if(!v || !current) return;
-  if(v === current.w.toLowerCase()) correct(); else wrong();
-}
-checkBtn.addEventListener("click", check);
-ansEl.addEventListener("keydown", e => { if(e.key === "Enter") check(); });
-againBtn.addEventListener("click", ()=>{ resetDay(); practice.style.display="block"; doneBox.style.display="none"; pickNext(); });
-updateUI(); pickNext();
-if("serviceWorker" in navigator){ navigator.serviceWorker.register("sw.js"); }
-</script>
+    // Web Audio (inga ljudfiler)
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
+    function tone(freq, duration=0.18){ try{ const o = audio.createOscillator(); const g = audio.createGain(); o.frequency.value=freq; o.type='sine'; o.connect(g); g.connect(audio.destination); g.gain.setValueAtTime(0.0001,audio.currentTime); g.gain.exponentialRampToValueAtTime(0.4,audio.currentTime+0.01); o.start(); g.gain.exponentialRampToValueAtTime(0.0001,audio.currentTime+duration); o.stop(audio.currentTime+duration);}catch(e){} }
+    function chimeOK(){ tone(660,0.12); setTimeout(()=>tone(880,0.14),90); }
+    function buzzBad(){ tone(140,0.22); setTimeout(()=>tone(110,0.22),120); }
+
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+    function speak(word){ try{ const u=new SpeechSynthesisUtterance(word); u.lang='en-US'; const v=window.speechSynthesis.getVoices().find(x=>/en-/i.test(x.lang)); if(v) u.voice=v; u.rate=0.95; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);}catch(e){} }
+
+    function updateCounters(){ scoreEl.textContent = `${correct} / ${index}`; bar.style.width = Math.round((index/deck.length)*100)+'%'; }
+
+    function showQuestion(){
+      const w = deck[index];
+      svEl.textContent = w.sv;
+      input.value = '';
+      input.disabled = false;
+      input.focus({preventScroll:true});
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      actionRow.style.display = '';
+      resultRow.style.display = 'none';
+      hintBtn.disabled = false;
+      updateCounters();
+    }
+
+    function finish(){
+      svEl.textContent = 'Klart! 🎉';
+      feedback.className = 'feedback ok';
+      feedback.textContent = `Poäng: ${correct} av ${deck.length}`;
+      input.disabled = true; actionRow.style.display='none'; resultRow.style.display='none';
+      bar.style.width='100%'; scoreEl.textContent = `${correct} / ${deck.length}`;
+    }
+
+    checkBtn.addEventListener('click', () => {
+      if(audio.state==='suspended'){ audio.resume(); }
+      const w = deck[index];
+      const guess = (input.value||'').trim().toLowerCase();
+      if(!guess){ input.focus(); return; }
+      const target = w.en.toLowerCase();
+      if(guess === target){
+        correct++; chimeOK();
+        feedback.className = 'feedback ok'; feedback.textContent = 'Rätt! ✔️';
+        actionRow.style.display = 'none'; // ta bort ledtrådsknappen när rätt
+        resultRow.style.display = '';
+        input.disabled = true;
+        setTimeout(()=>{ speak(w.en); }, 500); // spela upp efter ~0.5 s
+      } else {
+        buzzBad();
+        feedback.className = 'feedback bad';
+        const lead = target.slice(0,2);
+        feedback.textContent = `Fel. Ledtråd: ${lead}…`;
+        // hintknappen kvar om man vill prova igen
+        input.focus();
+      }
+    });
+
+    hintBtn.addEventListener('click', () => {
+      const target = deck[index].en.toLowerCase();
+      const lead = target.slice(0,2);
+      feedback.className = 'feedback';
+      feedback.textContent = `Ledtråd: ${lead}…`;
+      input.focus();
+    });
+
+    listenBtn.addEventListener('click', ()=>{ speak(deck[index].en); });
+
+    nextBtn.addEventListener('click', ()=>{
+      index++;
+      if(index>=deck.length){ finish(); return; }
+      showQuestion();
+    });
+
+    // Init
+    showQuestion();
+  </script>
 </body>
 </html>
