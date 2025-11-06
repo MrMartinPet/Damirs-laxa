@@ -3,13 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Viljas Läxapp – Engelska glosor</title>
-  <style>
+  <title>Viljas glosor – Engelska</title>le>
     :root{ --bg:#f7f7f9; --fg:#111; --ok:#16a34a; --bad:#b91c1c; --card:#ffffff; --border:#e5e7eb; --accent:#111827 }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--fg); display:grid; place-items:center; padding:14px}
-    .app{ width:min(720px,100%); background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow:0 8px 30px rgba(0,0,0,.05)}
+    html,body{hebody{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--fg); display:flex; justify-content:flex-start; align-items:stretch; min-height:100svh; padding:10px 14px 14px; }dy{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--fg); display:flex; justify-content:flex-start; align-items:stret.app{ width:min(720px,100%); background:var(--card); border:1px solid var(--border); border-radius:18px; padding:18px 18px 18px; box-shadow:0 8px 30px rgba(0,0,0,.05); margin:0 auto; } padding:18px; box-shadow:0 8px 30px rgba(0,0,0,.05); margin:0 auto; }
     header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
     h1{font-size:22px; margin:0}
     #score{font-weight:700}
@@ -24,12 +21,8 @@
     .progress{ height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 0 }
     .progress>i{display:block;height:100%;width:0;background:#111827}
   </style>
-</head>
-<body>
-  <main class="app" role="application">
-    <header>
-      <h1>Viljas läxapp</h1>
-      <div id="score">0 / 0</div>
+</he<h1>Viljas glosor</h1>ss="app<div id="score">0 / 0 • Första försök: 0 / 0</div>header>
+      <h1>Vi<div class="progress" aria-hidden="true"><i id="bar"></i></div> / 0</div>
     </header>
 
     <div class="progress" aria-hidden="true"><i id="bar"></i></div>
@@ -53,7 +46,7 @@
   </main>
 
   <script>
-    // Ordlistan (från fotot)
+    // Glosor (från bilden)
     const WORDS = [
       { sv: 'Hus', en: 'house' },
       { sv: 'Tak', en: 'roof' },
@@ -62,12 +55,7 @@
       { sv: 'Bredvid', en: 'beside' },
       { sv: 'Höger', en: 'right' },
       { sv: 'Gång / stig', en: 'path' },
-      { sv: 'Trädgård', en: 'garden' },
-      { sv: 'Trä', en: 'wood' },
-      { sv: 'Sten', en: 'stone' },
-    ];
-
-    const svEl = document.getElementById('sv');
+      { sv: 'Trädgård', en: 'const svEl = document.getElementById('sv');
     const input = document.getElementById('answer');
     const checkBtn = document.getElementById('check');
     const hintBtn = document.getElementById('hint');
@@ -82,6 +70,17 @@
     let deck = shuffle([...WORDS]);
     let index = 0;
     let correct = 0;
+    let firstTryCorrect = 0;
+    let triedOnce = false; // om hon redan gissat på ordet
+    let usedHint = false;  // om ledtråd använts på ordetument.getElementById('next');
+
+    // State
+    let deck = shuffle([...WORDS]);
+    let index = 0;
+    let correct = 0;
+    let firstTryCorrect = 0;
+    let triedOnce = false; // om hon redan gissat på ordet
+    let usedHint = false;  // om ledtråd använts på ordet
 
     // Web Audio (inga ljudfiler)
     const audio = new (window.AudioContext || window.webkitAudioContext)();
@@ -89,58 +88,70 @@
     function chimeOK(){ tone(660,0.12); setTimeout(()=>tone(880,0.14),90); }
     function buzzBad(){ tone(140,0.22); setTimeout(()=>tone(110,0.22),120); }
 
+    // Utils
     function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
-
-    function speak(word){ try{ const u=new SpeechSynthesisUtterance(word); u.lang='en-US'; const v=window.speechSynthesis.getVoices().find(x=>/en-/i.test(x.lang)); if(v) u.voice=v; u.rate=0.95; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);}catch(e){} }
-
-    function updateCounters(){ scoreEl.textContent = `${correct} / ${index}`; bar.style.width = Math.round((index/deck.length)*100)+'%'; }
-
-    function showQuestion(){
+ function updateCounters(){ scoreEl.textContent = `${correct} / ${index} • Första försök: ${firstTryCorrect} / ${index}`; bar.style.width = Math.round((index/deck.length)*100)+'%'; }erance(word); u.lang='en-US'; const v=window.speechSynthesis.getVoices().find(x=function showQuestion(){
       const w = deck[index];
       svEl.textContent = w.sv;
       input.value = '';
       input.disabled = false;
       input.focus({preventScroll:true});
+      setTimeout(()=>{ input.scrollIntoView({block:'start'}); window.scrollTo({top:0,behavior:'smooth'}); }, 100);
       feedback.textContent = '';
       feedback.className = 'feedback';
       actionRow.style.display = '';
       resultRow.style.display = 'none';
       hintBtn.disabled = false;
+      triedOnce = false;
+      usedHint = false;
+      updateCounters();
+    }ntent = `${correct} / ${index} • Första försök: ${firstTryCorrect} / ${index}`; bar.style.width = Math.round((index/deck.length)*100)+'%'; }
+
+    // Flow
+    function showQuestion(){
+      const w = deck[index];
+      function finish(){
+      svEl.textContent = 'Klart! 🎉';
+      const pluggaKlar = (firstTryCorrect === deck.length);
+      feedback.className = 'feedback ok';
+      feedback.innerHTML = `Poäng: ${correct} av ${deck.length}<br>Förut.scrollIntoView({block:'start'}); window.scrollTo({top:0,behavior:'smooth'}); }, 120);
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      actionRow.style.display = '';
+      resultRow.style.display = 'none';
+      hintBtn.disabled = false;
+      triedOnce = false;
+      usedHint = false;
       updateCounters();
     }
 
     function finish(){
       svEl.textContent = 'Klart! 🎉';
+      const pluggaKlar = (firstTryCorrect === deck.length);
       feedback.className = 'feedback ok';
-      feedback.textContent = `Poäng: ${correct} av ${deck.length}`;
+      feedback.innerHTML = `Poäng: ${correct} av ${deck.length}<br>Första försök: ${firstTryCorrect} av ${deck.length}` + (pluggaKlar ? '<br>✅ Du har pluggat in hela läxan!' : '');
       input.disabled = true; actionRow.style.display='none'; resultRow.style.display='none';
-      bar.style.width='100%'; scoreEl.textContent = `${correct} / ${deck.length}`;
-    }
-
-    checkBtn.addEventListener('click', () => {
-      if(audio.state==='suspended'){ audio.resume(); }
-      const w = deck[index];
-      const guess = (input.value||'').trim().toLowerCase();
-      if(!guess){ input.focus(); return; }
+      bar.style.width='100%'; scoreEl.textContent = `${correct} / ${deck.length} • Försk = () => { deck = shuffle([...WORDS]); index=0;
       const target = w.en.toLowerCase();
       if(guess === target){
-        correct++; chimeOK();
+        correct++;
+        if(!usedHint && triedOnce){ firstTryCorrect++; }
+        chimeOK();
         feedback.className = 'feedback ok'; feedback.textContent = 'Rätt! ✔️';
-        actionRow.style.display = 'none'; // ta bort ledtrådsknappen när rätt
+        actionRow.style.display = 'none'; // döljer ledtrådsknappen när rätt
         resultRow.style.display = '';
         input.disabled = true;
-        setTimeout(()=>{ speak(w.en); }, 500); // spela upp efter ~0.5 s
+        setTimeout(()=>{ speak(w.en); }, 500);
       } else {
         buzzBad();
         feedback.className = 'feedback bad';
-        const lead = target.slice(0,2);
-        feedback.textContent = `Fel. Ledtråd: ${lead}…`;
-        // hintknappen kvar om man vill prova igen
+        feedback.textContent = 'Fel. Testa igen eller tryck Ledtråd.';
         input.focus();
       }
     });
 
-    hintBtn.addEventListener('click', () => {
+    input.addEventListener('keyck', () => {
+      usedHint = true;
       const target = deck[index].en.toLowerCase();
       const lead = target.slice(0,2);
       feedback.className = 'feedback';
