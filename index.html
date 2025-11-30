@@ -41,12 +41,12 @@
 
   .pin{
     position:absolute;
-    width:22px;
-    height:22px;
+    width:18px;
+    height:18px;
     border-radius:50%;
-    background:rgba(0,0,0,.85);
+    background:#222;
     color:#fff;
-    font-size:0.75rem;
+    font-size:0.7rem;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -54,11 +54,19 @@
     box-shadow:0 1px 3px rgba(0,0,0,.4);
     cursor:pointer;
   }
-  .pin.self-correct{
+  .pin.correct{
     background:#2a8f2a;
   }
-  .pin.revealed{
-    background:#1b6aa8;
+  .pin.correct-warning{
+    background:#2a8f2a;
+    border:2px solid #ffcc00;
+  }
+  .pin.correct-warning::after{
+    content:"⚠";
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    font-size:0.6rem;
   }
   .pin.wrong{
     background:#c33;
@@ -129,7 +137,7 @@
   }
   .fieldLabel{
     font-size:0.8rem;
-    width:60px;
+    width:70px;
   }
   .fieldInput{
     flex:1;
@@ -172,7 +180,7 @@
 <body>
 
 <h1>Norden – karta</h1>
-<div class="subtitle">Tryck på en siffra på kartan, skriv in svaret och kolla platsen.</div>
+<div class="subtitle">Tryck på en siffra, skriv i rutan och kolla platsen.</div>
 
 <div class="map-wrapper">
   <div class="map" id="map"></div>
@@ -185,7 +193,7 @@
   <button id="resetBtn">Nollställ</button>
 </div>
 
-<!-- Bottenpanel för aktiv plats -->
+<!-- Panel för vald plats -->
 <div id="panel">
   <div id="panelTitle"></div>
   <div id="panelHint"></div>
@@ -216,56 +224,56 @@ function normalize(str){
 function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 
 // ======== 19 platser =========
-// left/top är grovt anpassade för din bild – finjustera vid behov.
+// labelShort visas i panelen – innehåller INTE svaret.
 const PLACES = [
   // 1–5: land + huvudstad
   {
     num:1,
     type:"country",
-    label:"Sverige / Stockholm",
+    labelShort:"Land + huvudstad",
     left:55, top:65,
     parts:[
-      {id:"sverige-land",  label:"Land", answers:["sverige"], isCountryName:true},
+      {id:"sverige-land",  label:"Land", answers:["sverige"]},
       {id:"sverige-stad",  label:"Stad", answers:["stockholm"]}
     ]
   },
   {
     num:2,
     type:"country",
-    label:"Norge / Oslo",
+    labelShort:"Land + huvudstad",
     left:37, top:63,
     parts:[
-      {id:"norge-land",    label:"Land", answers:["norge"], isCountryName:true},
+      {id:"norge-land",    label:"Land", answers:["norge"]},
       {id:"norge-stad",    label:"Stad", answers:["oslo"]}
     ]
   },
   {
     num:3,
     type:"country",
-    label:"Danmark / Köpenhamn",
-    left:45, top:86,
+    labelShort:"Land + huvudstad",
+    left:44, top:87,
     parts:[
-      {id:"danmark-land",  label:"Land", answers:["danmark"], isCountryName:true},
+      {id:"danmark-land",  label:"Land", answers:["danmark"]},
       {id:"danmark-stad",  label:"Stad", answers:["köpenhamn","kopenhamn","copenhagen"]}
     ]
   },
   {
     num:4,
     type:"country",
-    label:"Finland / Helsingfors",
+    labelShort:"Land + huvudstad",
     left:73, top:60,
     parts:[
-      {id:"finland-land",  label:"Land", answers:["finland"], isCountryName:true},
+      {id:"finland-land",  label:"Land", answers:["finland"]},
       {id:"finland-stad",  label:"Stad", answers:["helsingfors","helsinki"]}
     ]
   },
   {
     num:5,
     type:"country",
-    label:"Island / Reykjavik",
-    left:18, top:33,
+    labelShort:"Land + huvudstad",
+    left:19, top:34,
     parts:[
-      {id:"island-land",   label:"Land", answers:["island"], isCountryName:true},
+      {id:"island-land",   label:"Land", answers:["island"]},
       {id:"island-stad",   label:"Stad", answers:["reykjavik","reykjavík"]}
     ]
   },
@@ -274,149 +282,122 @@ const PLACES = [
   {
     num:6,
     type:"island",
-    label:"Ö – Gotland",
-    left:63, top:77,
-    parts:[
-      {id:"gotland", label:"Namn", answers:["gotland"]}
-    ]
+    labelShort:"Ö",
+    left:63, top:72,
+    parts:[ {id:"gotland", label:"Namn", answers:["gotland"] } ]
   },
   {
     num:7,
     type:"island",
-    label:"Ö – Öland",
-    left:59, top:83,
-    parts:[
-      {id:"oland", label:"Namn", answers:["öland","oland"]}
-    ]
+    labelShort:"Ö",
+    left:60, top:79,
+    parts:[ {id:"oland", label:"Namn", answers:["öland","oland"] } ]
   },
   {
     num:8,
     type:"island",
-    label:"Ö – Åland",
-    left:60, top:58,
-    parts:[
-      {id:"aland", label:"Namn", answers:["åland","aland"]}
-    ]
+    labelShort:"Ö",
+    left:59, top:57,
+    parts:[ {id:"aland", label:"Namn", answers:["åland","aland"] } ]
   },
 
   // 9–11: sjöar
   {
     num:9,
     type:"lake",
-    label:"Sjö – Vänern",
-    left:49, top:69,
-    parts:[
-      {id:"vanern", label:"Namn", answers:["vänern","vanern"]}
-    ]
+    labelShort:"Sjö",
+    left:48, top:66,
+    parts:[ {id:"vanern", label:"Namn", answers:["vänern","vanern"] } ]
   },
   {
     num:10,
     type:"lake",
-    label:"Sjö – Vättern",
-    left:52, top:74,
-    parts:[
-      {id:"vatttern", label:"Namn", answers:["vättern","vatttern"]}
-    ]
+    labelShort:"Sjö",
+    left:51, top:72,
+    parts:[ {id:"vatttern", label:"Namn", answers:["vättern","vatttern"] } ]
   },
   {
     num:11,
     type:"lake",
-    label:"Sjö – Mälaren",
-    left:56, top:66,
-    parts:[
-      {id:"malaren", label:"Namn", answers:["mälaren","malaren"]}
-    ]
+    labelShort:"Sjö",
+    left:54, top:63,
+    parts:[ {id:"malaren", label:"Namn", answers:["mälaren","malaren"] } ]
   },
 
   // 12–19: hav / sund / vikar
   {
     num:12,
     type:"water",
-    label:"Hav – Östersjön",
+    labelShort:"Hav",
     left:68, top:74,
-    parts:[
-      {id:"ostersjon", label:"Namn", answers:["östersjön","ostersjon"]}
-    ]
+    parts:[ {id:"ostersjon", label:"Namn", answers:["östersjön","ostersjon"] } ]
   },
   {
     num:13,
     type:"water",
-    label:"Hav – Nordsjön",
+    labelShort:"Hav",
     left:27, top:69,
-    parts:[
-      {id:"nordsjon", label:"Namn", answers:["nordsjön","nordsjon"]}
-    ]
+    parts:[ {id:"nordsjon", label:"Namn", answers:["nordsjön","nordsjon"] } ]
   },
   {
     num:14,
     type:"water",
-    label:"Hav – Bottenhavet",
+    labelShort:"Hav",
     left:63, top:52,
-    parts:[
-      {id:"bottenhavet", label:"Namn", answers:["bottenhavet"]}
-    ]
+    parts:[ {id:"bottenhavet", label:"Namn", answers:["bottenhavet"] } ]
   },
   {
     num:15,
     type:"water",
-    label:"Vik – Bottenviken",
+    labelShort:"Vik",
     left:65, top:42,
-    parts:[
-      {id:"bottenviken", label:"Namn", answers:["bottenviken"]}
-    ]
+    parts:[ {id:"bottenviken", label:"Namn", answers:["bottenviken"] } ]
   },
   {
     num:16,
     type:"water",
-    label:"Vik – Finska viken",
+    labelShort:"Vik",
     left:80, top:64,
-    parts:[
-      {id:"finskaviken", label:"Namn", answers:["finska viken","finskaviken"]}
-    ]
+    parts:[ {id:"finskaviken", label:"Namn", answers:["finska viken","finskaviken"] } ]
   },
   {
     num:17,
     type:"water",
-    label:"Sund – Skagerrak",
-    left:39, top:72,
-    parts:[
-      {id:"skagerrak", label:"Namn", answers:["skagerrak"]}
-    ]
+    labelShort:"Sund",
+    left:37, top:70,
+    parts:[ {id:"skagerrak", label:"Namn", answers:["skagerrak"] } ]
   },
   {
     num:18,
     type:"water",
-    label:"Sund – Kattegatt",
-    left:43, top:79,
-    parts:[
-      {id:"kattegatt", label:"Namn", answers:["kattegatt"]}
-    ]
+    labelShort:"Sund",
+    left:40, top:76,
+    parts:[ {id:"kattegatt", label:"Namn", answers:["kattegatt"] } ]
   },
   {
     num:19,
     type:"water",
-    label:"Sund – Öresund",
-    left:46, top:84,
-    parts:[
-      {id:"oresund", label:"Namn", answers:["öresund","oresund"]}
-    ]
+    labelShort:"Sund",
+    left:45, top:82,
+    parts:[ {id:"oresund", label:"Namn", answers:["öresund","oresund"] } ]
   }
 ];
 
 // ======== STATE =========
-// Ett fält per part (land, stad, namn)
-const fields = []; // {placeNum, partId, label, answers, value, correct, revealed}
+const fields = [];         // ett fält per textinput
+const placeState = {};     // per plats: försök, använd facit, någonsin fel
 
 PLACES.forEach(place=>{
+  placeState[place.num] = {attempts:0, usedHint:false, everWrong:false};
   place.parts.forEach(part=>{
     fields.push({
       placeNum: place.num,
       partId: part.id,
       label: part.label,
       answers: part.answers,
-      value: "",
-      correct: false,
-      revealed: false
+      value:"",
+      correct:false,
+      revealed:false
     });
   });
 });
@@ -428,17 +409,17 @@ const mapEl = document.getElementById("map");
 const scoreEl = document.getElementById("score");
 
 PLACES.forEach(place=>{
-  const p = document.createElement("div");
-  p.className = "pin";
-  p.style.left = place.left + "%";
-  p.style.top  = place.top + "%";
-  p.textContent = place.num;
-  p.dataset.num = place.num;
-  p.addEventListener("click", ()=>openPanel(place.num));
-  mapEl.appendChild(p);
+  const pin = document.createElement("div");
+  pin.className = "pin";
+  pin.style.left = place.left + "%";
+  pin.style.top  = place.top + "%";
+  pin.textContent = place.num;
+  pin.dataset.num = place.num;
+  pin.addEventListener("click", ()=>openPanel(place.num));
+  mapEl.appendChild(pin);
 });
 
-// ======== Panelhantering =========
+// ======== Panel =========
 const panel = document.getElementById("panel");
 const panelTitle = document.getElementById("panelTitle");
 const panelHint = document.getElementById("panelHint");
@@ -448,7 +429,7 @@ const panelMsg = document.getElementById("panelMsg");
 document.getElementById("checkPlaceBtn").addEventListener("click", ()=>{
   if(activePlaceNum!=null){
     readInputsFromPanel();
-    checkPlace(activePlaceNum);
+    checkPlace(activePlaceNum, true);
     updateScore();
   }
 });
@@ -457,7 +438,7 @@ document.getElementById("showAnswersBtn").addEventListener("click", ()=>{
   if(activePlaceNum!=null){
     revealPlace(activePlaceNum);
     renderPanelFields(activePlaceNum);
-    updatePinClasses(activePlaceNum);
+    updatePinClass(activePlaceNum);
     updateScore();
   }
 });
@@ -467,10 +448,11 @@ document.getElementById("closePanelBtn").addEventListener("click", ()=>closePane
 function openPanel(num){
   activePlaceNum = num;
   const place = PLACES.find(p=>p.num===num);
-  panelTitle.textContent = `Plats ${num}: ${place.label}`;
-  panelHint.textContent = place.type==="country"
-    ? "Skriv både land och huvudstad."
-    : "Skriv namnet för platsen.";
+  panelTitle.textContent = `Plats ${num} – ${place.labelShort}`;
+  panelHint.textContent =
+    place.type==="country"
+      ? "Skriv både land och huvudstad."
+      : "Skriv namnet på platsen.";
   panelMsg.textContent = "";
   renderPanelFields(num);
   panel.classList.add("visible");
@@ -501,7 +483,6 @@ function renderPanelFields(num){
     inp.addEventListener("input", e=>{
       f.value = e.target.value;
       f.correct = false;
-      // ändrar man efter facit ska den fortfarande räknas som "med hjälp"
       e.target.classList.remove("correct","wrong");
     });
     row.appendChild(lab);
@@ -511,22 +492,23 @@ function renderPanelFields(num){
 }
 
 function readInputsFromPanel(){
-  const inputs = panelFields.querySelectorAll(".fieldRow");
+  const inputs = panelFields.querySelectorAll(".fieldRow input");
   const placeFields = fields.filter(f=>f.placeNum===activePlaceNum);
-  inputs.forEach((rowEl, idx)=>{
-    const inp = rowEl.querySelector("input");
+  inputs.forEach((inp, idx)=>{
     const f = placeFields[idx];
     f.value = inp.value;
   });
 }
 
-// ======== Rättningslogik =========
-function checkPlace(num){
-  const place = PLACES.find(p=>p.num===num);
+// ======== Rättning =========
+function checkPlace(num, fromPanel=false){
+  const ps = placeState[num];
   const placeFields = fields.filter(f=>f.placeNum===num);
 
-  let allCorrect = true;
+  ps.attempts++;
+
   let anyAnswered = false;
+  let allCorrect = true;
 
   placeFields.forEach(f=>{
     const norm = normalize(f.value);
@@ -534,102 +516,109 @@ function checkPlace(num){
     f.correct = ok;
     if(norm!=="") anyAnswered = true;
     if(!ok) allCorrect = false;
+    if(!ok && norm!=="") ps.everWrong = true;
   });
 
-  const pin = mapEl.querySelector(`.pin[data-num="${num}"]`);
-  pin.classList.remove("self-correct","revealed","wrong");
-
-  const revealedHere = placeFields.some(f=>f.revealed);
-
-  if(allCorrect && anyAnswered){
-    if(revealedHere){
-      pin.classList.add("revealed");
-      panelMsg.textContent = "Rätt – men du har tittat på facit för den här platsen.";
-    }else{
-      pin.classList.add("self-correct");
-      panelMsg.textContent = "Rätt! Bra jobbat.";
-    }
-  }else if(anyAnswered){
-    pin.classList.add("wrong");
-    panelMsg.textContent = "Inte helt rätt än.";
-  }else{
-    panelMsg.textContent = "Skriv ett svar och kolla igen.";
+  if(fromPanel){
+    // uppdatera färg i panel
+    renderPanelFields(num);
   }
 
-  // uppdatera färger i panelen
-  renderPanelFields(num);
+  if(!anyAnswered){
+    panelMsg.textContent = "Skriv något först.";
+    updatePinClass(num);
+    return;
+  }
+
+  if(allCorrect){
+    if(ps.usedHint || ps.everWrong && ps.attempts>1){
+      panelMsg.textContent = "Rätt – men efter fel/facit. Den markeras med ⚠.";
+    }else{
+      panelMsg.textContent = "Rätt!";
+    }
+  }else{
+    panelMsg.textContent = "Inte helt rätt ännu.";
+  }
+
+  updatePinClass(num);
 }
 
 function revealPlace(num){
+  const ps = placeState[num];
+  ps.usedHint = true;
   const placeFields = fields.filter(f=>f.placeNum===num);
   placeFields.forEach(f=>{
     f.value = f.answers[0];
     f.correct = true;
     f.revealed = true;
   });
-  panelMsg.textContent = "Facit visat – den här platsen räknas som rätt med hjälp.";
+  panelMsg.textContent = "Facit visat. Den här platsen räknas som klar med hjälp.";
 }
 
-function updatePinClasses(num){
-  const placeFields = fields.filter(f=>f.placeNum===num);
+function updatePinClass(num){
   const pin = mapEl.querySelector(`.pin[data-num="${num}"]`);
-  pin.classList.remove("self-correct","revealed","wrong");
+  const ps = placeState[num];
+  const placeFields = fields.filter(f=>f.placeNum===num);
+
+  pin.classList.remove("correct","correct-warning","wrong");
 
   const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
   const allCorrect = placeFields.every(f=>f.correct);
-  const anyRevealed = placeFields.some(f=>f.revealed);
 
-  if(allCorrect && anyAnswered){
-    pin.classList.add(anyRevealed ? "revealed" : "self-correct");
-  }else if(anyAnswered){
+  if(!anyAnswered){
+    return; // neutral
+  }
+
+  if(allCorrect){
+    if(ps.usedHint || ps.everWrong){
+      pin.classList.add("correct-warning");
+    }else{
+      pin.classList.add("correct");
+    }
+  }else{
     pin.classList.add("wrong");
   }
 }
 
 // ======== Sammanfattning =========
 function updateScore(){
-  let correctSelf = 0;
-  let correctHelp = 0;
+  let selfCorrect = 0;
+  let helpOrAfterFail = 0;
+  let wrong = 0;
 
   PLACES.forEach(place=>{
+    const ps = placeState[place.num];
     const placeFields = fields.filter(f=>f.placeNum===place.num);
     const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
     const allCorrect = placeFields.every(f=>f.correct);
-    const anyRevealed = placeFields.some(f=>f.revealed);
-    if(allCorrect && anyAnswered){
-      if(anyRevealed) correctHelp++;
-      else correctSelf++;
+
+    if(!anyAnswered) return;
+
+    if(allCorrect){
+      if(ps.usedHint || ps.everWrong){
+        helpOrAfterFail++;
+      }else{
+        selfCorrect++;
+      }
+    }else{
+      wrong++;
     }
   });
 
-  const totalPlaces = PLACES.length;
-  const totalCorrect = correctSelf + correctHelp;
+  const total = PLACES.length;
+  const totalDone = selfCorrect + helpOrAfterFail;
+
   scoreEl.textContent =
-    `Platser helt rätt: ${totalCorrect} av ${totalPlaces} (själv: ${correctSelf}, med hjälp: ${correctHelp}).`;
+    `Klara: ${totalDone}/${total}  •  utan hjälp: ${selfCorrect}  •  efter fel/hjälp: ${helpOrAfterFail}  •  fel kvar: ${wrong}`;
 }
 
 // ======== Globala knappar =========
 document.getElementById("checkAllBtn").addEventListener("click", ()=>{
   PLACES.forEach(p=>{
-    const anyAnswered = fields.some(f=>f.placeNum===p.num && normalize(f.value)!=="");
+    const placeFields = fields.filter(f=>f.placeNum===p.num);
+    const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
     if(anyAnswered){
-      // kontrollera utan att öppna panel
-      const placeFields = fields.filter(f=>f.placeNum===p.num);
-      let allCorrect = true;
-      placeFields.forEach(f=>{
-        const norm = normalize(f.value);
-        const ok = f.answers.some(a=>normalize(a)===norm);
-        f.correct = ok;
-        if(!ok) allCorrect = false;
-      });
-      const anyRevealed = placeFields.some(f=>f.revealed);
-      const pin = mapEl.querySelector(`.pin[data-num="${p.num}"]`);
-      pin.classList.remove("self-correct","revealed","wrong");
-      if(allCorrect){
-        pin.classList.add(anyRevealed ? "revealed" : "self-correct");
-      }else{
-        pin.classList.add("wrong");
-      }
+      checkPlace(p.num,false);
     }
   });
   updateScore();
@@ -641,8 +630,13 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
     f.correct = false;
     f.revealed = false;
   });
+  Object.values(placeState).forEach(ps=>{
+    ps.attempts = 0;
+    ps.usedHint = false;
+    ps.everWrong = false;
+  });
   mapEl.querySelectorAll(".pin").forEach(p=>{
-    p.classList.remove("self-correct","revealed","wrong");
+    p.classList.remove("correct","correct-warning","wrong");
   });
   scoreEl.textContent = "";
   panelFields.innerHTML = "";
