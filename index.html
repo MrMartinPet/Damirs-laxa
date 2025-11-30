@@ -1,182 +1,312 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Veckans glosor – Engelska</title>
-  <style>
-    :root{ --bg:#f7f7f9; --fg:#111; --ok:#16a34a; --bad:#b91c1c; --card:#ffffff; --border:#e5e7eb; --accent:#111827 }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--fg); display:flex; justify-content:flex-start; align-items:stretch; min-height:100svh; padding:10px 14px 14px; }
-    .app{ width:min(720px,100%); background:var(--card); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:0 8px 30px rgba(0,0,0,.05); margin:0 auto; }
-    header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
-    h1{font-size:22px; margin:0}
-    #score{font-weight:700}
-    .sv{font-size:44px; font-weight:800; letter-spacing:.5px; margin:6px 0 14px}
-    input[type="text"]{ width:100%; font-size:32px; padding:16px; border-radius:14px; border:1px solid var(--border); outline:none; -webkit-appearance:none; appearance:none }
-    input[type="text"]:focus{ border-color:#9ca3af }
-    .row{display:flex; gap:10px; margin-top:14px}
-    button{ cursor:pointer; border:1px solid var(--border); background:var(--accent); color:#fff; border-radius:14px; padding:16px 18px; font-size:20px; flex:1; -webkit-tap-highlight-color:transparent }
-    button.ghost{ background:#fff; color:#111 }
-    .feedback{ min-height:40px; margin-top:12px; font-weight:800; font-size:24px }
-    .ok{ color:var(--ok)} .bad{ color:var(--bad)}
-    .progress{ height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 0 }
-    .progress>i{display:block;height:100%;width:0;background:#111827}
-  </style>
+<meta charset="UTF-8" />
+<title>Norden-träning</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 16px;
+    max-width: 600px;
+    margin-inline: auto;
+    background:#f5f5f5;
+  }
+  h1 {
+    text-align:center;
+    font-size:1.6rem;
+    margin-bottom:0.2rem;
+  }
+  .subtitle{
+    text-align:center;
+    font-size:0.9rem;
+    color:#555;
+    margin-bottom:1.2rem;
+  }
+  .card {
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+    padding:16px 14px 18px;
+  }
+  .badge-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+  .badge{
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:0.8rem;
+    border:1px solid #ddd;
+  }
+  .badge.active{
+    background:#222;
+    color:#fff;
+    border-color:#222;
+  }
+  #categoryTag{
+    font-size:0.85rem;
+    color:#666;
+    margin-bottom:4px;
+  }
+  #questionText{
+    font-size:1.15rem;
+    font-weight:600;
+    margin:8px 0 12px;
+    min-height:2.4em;
+  }
+  input[type="text"]{
+    width:100%;
+    padding:10px 12px;
+    font-size:1rem;
+    border-radius:8px;
+    border:1px solid #bbb;
+    box-sizing:border-box;
+  }
+  .btn-row{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  button{
+    flex:1;
+    padding:10px 0;
+    font-size:1rem;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+  }
+  #checkBtn{ background:#007aff; color:#fff; }
+  #nextBtn{ background:#e0e0e0; }
+  #feedback{
+    margin-top:10px;
+    font-size:0.95rem;
+    min-height:1.5em;
+  }
+  .ok{ color:#1b8c1b; }
+  .wrong{ color:#c41b1b; }
+  .muted{ color:#666; }
+  #scoreBox{
+    margin-top:10px;
+    font-size:0.9rem;
+    color:#444;
+  }
+</style>
 </head>
 <body>
-  <main class="app" role="application">
-    <header>
-      <h1>Veckans glosor</h1>
-      <div id="score">0 / 0 • Första försök: 0 / 0</div>
-    </header>
+<h1>Nordisk geografi</h1>
+<div class="subtitle">Träna länder, huvudstäder, öar och hav/sund/vikar.</div>
 
-    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+<div class="card">
+  <div class="badge-row">
+    <div class="badge active" data-filter="alla">Alla</div>
+    <div class="badge" data-filter="land">Länder &amp; huvudstäder</div>
+    <div class="badge" data-filter="ö">Öar</div>
+    <div class="badge" data-filter="vatten">Hav / sund / vikar</div>
+  </div>
 
-    <section aria-live="polite">
-      <div class="sv" id="sv"></div>
-      <input id="answer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="latin" enterkeyhint="done" />
+  <div id="categoryTag"></div>
+  <div id="questionText"></div>
 
-      <div class="row" id="actionRow">
-        <button id="check">Kontrollera</button>
-        <button class="ghost" id="hint">Ledtråd</button>
-      </div>
+  <input id="answerInput" type="text" placeholder="Skriv svaret här…" autocomplete="off" />
 
-      <div class="row" id="resultRow" style="display:none">
-        <button class="ghost" id="listen">Lyssna igen</button>
-        <button id="next">Nästa ord</button>
-      </div>
+  <div class="btn-row">
+    <button id="checkBtn">Kolla svar</button>
+    <button id="nextBtn">Nästa fråga</button>
+  </div>
 
-      <div class="feedback" id="feedback"></div>
-    </section>
-  </main>
+  <div id="feedback" class="muted"></div>
+  <div id="scoreBox"></div>
+</div>
 
-  <script>
-  // Glosor (från lappen)
-const WORDS = [
-  { en: 'go straight', sv: 'åk/gå rakt fram' },
-  { en: 'right',       sv: 'höger' },
-  { en: 'road',        sv: 'väg' },
-  { en: 'bus',         sv: 'buss' },
-  { en: 'car',         sv: 'bil' },
-  { en: 'taxi',        sv: 'taxi' },
-  { en: 'bike',        sv: 'cykel' },
-  { en: 'turn',        sv: 'sväng' },
-  { en: 'loud',        sv: 'högljutt' },
-  { en: 'left',        sv: 'vänster' },
+<script>
+// =========================
+// Frågebank – ÄNDRA HÄR VID BEHOV
+// =========================
+// Du kan lägga till/ta bort frågor. Varje fråga har:
+// type: "land" | "ö" | "vatten"
+// question: texten som visas
+// answers: lista med tillåtna svar (små bokstäver, utan extra mellanslag)
+
+const QUESTIONS = [
+  // ---- Länder & huvudstäder ----
+  { type: "land",
+    question: "Vad heter huvudstaden i Sverige?",
+    answers: ["stockholm"] },
+  { type: "land",
+    question: "Vad heter huvudstaden i Norge?",
+    answers: ["oslo"] },
+  { type: "land",
+    question: "Vad heter huvudstaden i Danmark?",
+    answers: ["köpenhamn","kopenhamn","copenhagen"] },
+  { type: "land",
+    question: "Vad heter huvudstaden i Finland?",
+    answers: ["helsingfors","helsinki"] },
+  { type: "land",
+    question: "Vad heter huvudstaden i Island?",
+    answers: ["reykjavik","reykjavík"] },
+
+  { type: "land",
+    question: "Vilket land har huvudstaden Stockholm?",
+    answers: ["sverige"] },
+  { type: "land",
+    question: "Vilket land har huvudstaden Oslo?",
+    answers: ["norge"] },
+  { type: "land",
+    question: "Vilket land har huvudstaden Köpenhamn?",
+    answers: ["danmark"] },
+  { type: "land",
+    question: "Vilket land har huvudstaden Helsingfors?",
+    answers: ["finland"] },
+  { type: "land",
+    question: "Vilket land har huvudstaden Reykjavik?",
+    answers: ["island"] },
+
+  // ---- Öar (exempel – anpassa efter läxan) ----
+  { type: "ö",
+    question: "Till vilket land hör Gotland?",
+    answers: ["sverige"] },
+  { type: "ö",
+    question: "Till vilket land hör Öland?",
+    answers: ["sverige"] },
+  { type: "ö",
+    question: "Till vilket land hör Åland?",
+    answers: ["finland"] },
+  { type: "ö",
+    question: "Till vilket land hör Färöarna?",
+    answers: ["danmark"] },
+  { type: "ö",
+    question: "Till vilket land hör Svalbard?",
+    answers: ["norge"] },
+
+  // ---- Hav / sund / vikar ----
+  { type: "vatten",
+    question: "Vad heter havet mellan Sverige och Finland? (stort, inte vikarna)",
+    answers: ["östersjön","ostersjon"] },
+  { type: "vatten",
+    question: "Vad heter havet väster om Norge?",
+    answers: ["nordsjön","nordsjon"] },
+  { type: "vatten",
+    question: "Vad heter sundet mellan Sverige och Danmark?",
+    answers: ["öresund","oresund"] },
+  { type: "vatten",
+    question: "Vad heter sundet mellan Danmark och Norge?",
+    answers: ["skagerrak"] },
+  { type: "vatten",
+    question: "Vad heter sundet mellan Danmark och Norge/Sverige söderut?",
+    answers: ["kattegatt","kattegatt"] },
+  { type: "vatten",
+    question: "Vad heter viken längst in i Bottenhavet, norr om Kvarken?",
+    answers: ["bottenviken"] },
+  { type: "vatten",
+    question: "Vad heter havsområdet mellan mellersta Sverige och Finland, norr om Åland?",
+    answers: ["bottenhavet"] },
+  { type: "vatten",
+    question: "Vad heter viken öster om Finland mot Ryssland?",
+    answers: ["finska viken"] }
 ];
-    // Element
-    const svEl = document.getElementById('sv');
-    const input = document.getElementById('answer');
-    const checkBtn = document.getElementById('check');
-    const hintBtn = document.getElementById('hint');
-    const feedback = document.getElementById('feedback');
-    const scoreEl = document.getElementById('score');
-    const bar = document.getElementById('bar');
-    const resultRow = document.getElementById('resultRow');
-    const actionRow = document.getElementById('actionRow');
-    const listenBtn = document.getElementById('listen');
-    const nextBtn = document.getElementById('next');
 
-    // State
-    let deck = shuffle([...WORDS]);
-    let index = 0;
-    let correct = 0;
-    let firstTryCorrect = 0;
-    let triedOnce = false; // om hon redan gissat på ordet
-    let usedHint = false;  // om ledtråd använts på ordet
+// =========================
+// App-logik
+// =========================
+let currentFilter = "alla";
+let filteredQuestions = [...QUESTIONS];
+let currentQuestion = null;
+let asked = 0;
+let correct = 0;
 
-    // Web Audio (inga ljudfiler)
-    const audio = new (window.AudioContext || window.webkitAudioContext)();
-    function tone(freq, duration=0.18){ try{ const o = audio.createOscillator(); const g = audio.createGain(); o.frequency.value=freq; o.type='sine'; o.connect(g); g.connect(audio.destination); g.gain.setValueAtTime(0.0001,audio.currentTime); g.gain.exponentialRampToValueAtTime(0.4,audio.currentTime+0.01); o.start(); g.gain.exponentialRampToValueAtTime(0.0001,audio.currentTime+duration); o.stop(audio.currentTime+duration);}catch(e){} }
-    function chimeOK(){ tone(660,0.12); setTimeout(()=>tone(880,0.14),90); }
-    function buzzBad(){ tone(140,0.22); setTimeout(()=>tone(110,0.22),120); }
+const categoryTag = document.getElementById("categoryTag");
+const questionText = document.getElementById("questionText");
+const answerInput = document.getElementById("answerInput");
+const feedback = document.getElementById("feedback");
+const scoreBox = document.getElementById("scoreBox");
+const checkBtn = document.getElementById("checkBtn");
+const nextBtn = document.getElementById("nextBtn");
+const badges = document.querySelectorAll(".badge");
 
-    // Utils
-    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
-    function speak(word){ try{ const u=new SpeechSynthesisUtterance(word); u.lang='en-US'; const v=window.speechSynthesis.getVoices().find(x=>/en-/i.test(x.lang)); if(v) u.voice=v; u.rate=0.95; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);}catch(e){} }
-    function updateCounters(){ scoreEl.textContent = `${correct} / ${index} • Första försök: ${firstTryCorrect} / ${index}`; bar.style.width = Math.round((index/deck.length)*100)+'%'; }
+function updateFilter(filter){
+  currentFilter = filter;
+  badges.forEach(b=>{
+    b.classList.toggle("active", b.dataset.filter === filter);
+  });
+  filteredQuestions = QUESTIONS.filter(q=>{
+    return filter === "alla" || q.type === filter;
+  });
+  asked = 0;
+  correct = 0;
+  scoreBox.textContent = "";
+  feedback.textContent = "";
+  newQuestion();
+}
 
-    // Flow
-    function showQuestion(){
-      const w = deck[index];
-      svEl.textContent = w.sv;
-      input.value = '';
-      input.disabled = false;
-      input.focus({preventScroll:true});
-      setTimeout(()=>{ input.scrollIntoView({block:'start'}); window.scrollTo({top:0,behavior:'smooth'}); }, 120);
-      feedback.textContent = '';
-      feedback.className = 'feedback';
-      actionRow.style.display = '';
-      resultRow.style.display = 'none';
-      hintBtn.disabled = false;
-      triedOnce = false;
-      usedHint = false;
-      updateCounters();
-    }
+function pickRandom(){
+  const idx = Math.floor(Math.random()*filteredQuestions.length);
+  return filteredQuestions[idx];
+}
 
-    function finish(){
-      svEl.textContent = 'Klart! 🎉';
-      const pluggaKlar = (firstTryCorrect === deck.length);
-      feedback.className = 'feedback ok';
-      feedback.innerHTML = `Poäng: ${correct} av ${deck.length}<br>Första försök: ${firstTryCorrect} av ${deck.length}` + (pluggaKlar ? '<br>✅ Du har pluggat in hela läxan!' : '');
-      input.disabled = true; actionRow.style.display='none'; resultRow.style.display='none';
-      bar.style.width='100%'; scoreEl.textContent = `${correct} / ${deck.length} • Första försök: ${firstTryCorrect} / ${deck.length}`;
-      // Börja om-knapp
-      const restart = document.createElement('button');
-      restart.textContent = 'Börja om';
-      restart.style.marginTop = '12px';
-      restart.onclick = () => { deck = shuffle([...WORDS]); index=0; correct=0; firstTryCorrect=0; showQuestion(); };
-      feedback.appendChild(restart);
-    }
+function prettyType(t){
+  if(t === "land") return "Länder & huvudstäder";
+  if(t === "ö") return "Öar";
+  if(t === "vatten") return "Hav / sund / vikar";
+  return "";
+}
 
-    // Events
-    checkBtn.addEventListener('click', () => {
-      if(audio.state==='suspended'){ audio.resume(); }
-      const w = deck[index];
-      const guess = (input.value||'').trim().toLowerCase();
-      if(!guess){ input.focus(); return; }
-      triedOnce = true;
-      const target = w.en.toLowerCase();
-      if(guess === target){
-        correct++;
-        if(!usedHint && triedOnce){ firstTryCorrect++; }
-        chimeOK();
-        feedback.className = 'feedback ok'; feedback.textContent = 'Rätt! ✔️';
-        actionRow.style.display = 'none'; // döljer ledtrådsknappen när rätt
-        resultRow.style.display = '';
-        input.disabled = true;
-        setTimeout(()=>{ speak(w.en); }, 500);
-      } else {
-        buzzBad();
-        feedback.className = 'feedback bad';
-        feedback.textContent = 'Fel. Testa igen eller tryck Ledtråd.';
-        input.focus();
-      }
-    });
+function newQuestion(){
+  currentQuestion = pickRandom();
+  categoryTag.textContent = prettyType(currentQuestion.type);
+  questionText.textContent = currentQuestion.question;
+  answerInput.value = "";
+  answerInput.focus();
+  feedback.textContent = "Skriv svaret och tryck på Kolla svar.";
+  feedback.className = "muted";
+}
 
-    input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') checkBtn.click(); });
+function normalize(str){
+  return str
+    .toLowerCase()
+    .trim()
+    .replaceAll("å","a")
+    .replaceAll("ä","a")
+    .replaceAll("ö","o");
+}
 
-    hintBtn.addEventListener('click', () => {
-      usedHint = true;
-      const target = deck[index].en.toLowerCase();
-      const lead = target.slice(0,2);
-      feedback.className = 'feedback';
-      feedback.textContent = `Ledtråd: ${lead}…`;
-      input.focus();
-    });
+function checkAnswer(){
+  if(!currentQuestion) return;
+  const user = normalize(answerInput.value);
+  if(!user){
+    feedback.textContent = "Skriv något först.";
+    feedback.className = "wrong";
+    return;
+  }
+  const ok = currentQuestion.answers.some(a => normalize(a) === user);
+  asked++;
+  if(ok){
+    correct++;
+    feedback.textContent = "Rätt! Bra jobbat.";
+    feedback.className = "ok";
+  } else {
+    feedback.textContent =
+      "Inte riktigt. Rätt svar: " + currentQuestion.answers[0];
+    feedback.className = "wrong";
+  }
+  scoreBox.textContent = `Rätt: ${correct} av ${asked}`;
+}
 
-    listenBtn.addEventListener('click', ()=>{ speak(deck[index].en); });
+checkBtn.addEventListener("click", checkAnswer);
+nextBtn.addEventListener("click", newQuestion);
+answerInput.addEventListener("keydown", e=>{
+  if(e.key === "Enter") checkAnswer();
+});
 
-    nextBtn.addEventListener('click', ()=>{
-      index++;
-      if(index>=deck.length){ finish(); return; }
-      showQuestion();
-    });
+badges.forEach(b=>{
+  b.addEventListener("click", ()=>updateFilter(b.dataset.filter));
+});
 
-    // Init
-    showQuestion();
-  </script>
+// start
+newQuestion();
+</script>
 </body>
 </html>
