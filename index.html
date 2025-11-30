@@ -1,44 +1,39 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8" />
-<title>Nordisk geografi – karta</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<title>Norden – Karta Quiz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   body{
     margin:0;
-    padding:12px;
+    padding:10px;
     font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-    background:#f5f5f5;
+    background:#f4f4f4;
   }
   h1{
-    font-size:1.4rem;
     text-align:center;
+    font-size:1.4rem;
     margin:4px 0 2px;
   }
   .subtitle{
     text-align:center;
-    font-size:0.9rem;
+    font-size:0.85rem;
     color:#555;
-    margin-bottom:10px;
-  }
-  .card{
-    background:#fff;
-    border-radius:14px;
-    box-shadow:0 2px 6px rgba(0,0,0,.15);
-    padding:10px;
-    max-width:640px;
-    margin:0 auto;
+    margin-bottom:8px;
   }
   .map{
     position:relative;
     width:100%;
+    max-width:420px;
+    margin:auto;
     aspect-ratio:3/4;
-    border-radius:12px;
-    background:#e6e6dd url("nordenkarta.jpg") center/contain no-repeat;
+    background:#dde url("nordenkarta.jpg") center/contain no-repeat;
+    border-radius:14px;
     overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
   }
-  .point{
+  .cluster{
     position:absolute;
     transform:translate(-50%,-50%);
     display:flex;
@@ -46,178 +41,160 @@
     align-items:center;
     gap:2px;
   }
-  .point-label{
-    font-size:0.6rem;
-    padding:2px 4px;
-    background:rgba(255,255,255,.8);
-    border-radius:6px;
+  .cluster::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(0,0,0,.08);
   }
-  .point input{
-    width:80px;
-    max-width:22vw;
+  .cluster.small::before{
+    width:60px;
+    height:60px;
+  }
+  .label-row{
+    display:flex;
+    gap:4px;
     font-size:0.6rem;
+  }
+  .label-pill{
+    padding:1px 4px;
+    border-radius:999px;
+    background:rgba(0,0,0,.06);
+  }
+  .field-row{
+    display:flex;
+    gap:3px;
+  }
+  input{
+    width:80px;
+    font-size:0.65rem;
     padding:3px 4px;
     border-radius:6px;
-    border:1px solid #bbb;
+    border:1px solid #aaa;
     text-align:center;
     background:rgba(255,255,255,.9);
   }
-  .point.country input{
-    width:100px;
-    max-width:26vw;
+  .country-input{
+    width:78px;
+  }
+  .capital-input{
+    width:78px;
   }
   .flag{
-    font-size:0.9rem;
-    min-height:1.1rem;
+    font-size:1rem;
+    text-align:center;
+    height:1.1rem;
+  }
+  .single-label{
+    font-size:0.65rem;
+    padding:1px 4px;
+    border-radius:6px;
+    background:rgba(0,0,0,.05);
+    margin-bottom:1px;
+  }
+  .single-input{
+    width:80px;
   }
   .correct{
-    border-color:#1b8c1b !important;
-    background:rgba(210,244,210,.9) !important;
+    border:2px solid #2a8f2a !important;
+    background:#d2f4d2 !important;
   }
   .wrong{
-    border-color:#c41b1b !important;
-    background:rgba(248,214,214,.9) !important;
+    border:2px solid #c33 !important;
+    background:#f8d6d6 !important;
   }
   #info{
-    margin-top:8px;
+    max-width:420px;
+    margin:8px auto 2px;
     font-size:0.8rem;
     color:#444;
   }
   #score{
-    margin-top:4px;
-    font-size:0.85rem;
+    max-width:420px;
+    margin:2px auto 6px;
+    font-size:0.8rem;
     font-weight:600;
+    text-align:center;
   }
-  #buttons{
+  #btns{
     display:flex;
     gap:6px;
-    margin-top:8px;
+    max-width:420px;
+    margin:0 auto;
   }
   button{
     flex:1;
     padding:8px 0;
-    border-radius:999px;
     border:none;
+    border-radius:999px;
     font-size:0.9rem;
     cursor:pointer;
   }
-  #checkAllBtn{ background:#007aff; color:#fff; }
-  #showAllBtn{ background:#e0e0e0; }
+  #checkAll{ background:#007aff; color:#fff; }
+  #showKey{ background:#d0d0d0; }
 </style>
 </head>
 <body>
-<h1>Nordisk geografi – karta</h1>
-<div class="subtitle">Fyll i länder + huvudstäder, öar, sjöar och hav/sund/vikar.</div>
 
-<div class="card">
-  <div class="map" id="map"></div>
+<h1>Norden – karta</h1>
+<div class="subtitle">Fyll i länder, huvudstäder, öar, sjöar och hav/sund/vikar.</div>
 
-  <div id="info">
-    För länderna skriver du <strong>land + huvudstad</strong>, t.ex.
-    <em>Sverige Stockholm</em> eller <em>Sverige, Stockholm</em>.
-    När ett land är rätt visas rätt flagga.
-  </div>
-  <div id="score"></div>
+<div class="map" id="map"></div>
 
-  <div id="buttons">
-    <button id="checkAllBtn">Kolla alla</button>
-    <button id="showAllBtn">Visa facit</button>
-  </div>
+<div id="info">
+  För länderna finns två rutor: <b>Land</b> och <b>Stad</b> (huvudstad).
+  När landnamnet är rätt visas flaggan.
+</div>
+<div id="score"></div>
+
+<div id="btns">
+  <button id="checkAll">Kolla alla</button>
+  <button id="showKey">Visa facit</button>
 </div>
 
 <script>
-// =========================
-// Data: 19 platser
-// =========================
+// ========= DATA =========
 
+// Länder (placering i %, mittpunkt för bubblan)
 const COUNTRIES = [
-  { id:"se", country:"sverige", capital:"stockholm", left:47, top:63, flag:"🇸🇪" },
+  { id:"se", country:"sverige", capital:"stockholm", left:50, top:60, flag:"🇸🇪" },
   { id:"no", country:"norge",  capital:"oslo",      left:30, top:45, flag:"🇳🇴" },
-  { id:"dk", country:"danmark",capital:"köpenhamn",left:34, top:77, flag:"🇩🇰", altCap:["kopenhamn","copenhagen"] },
-  { id:"fi", country:"finland",capital:"helsingfors",left:63, top:48, flag:"🇫🇮", altCap:["helsinki"] },
-  { id:"is", country:"island", capital:"reykjavik", left:10, top:30, flag:"🇮🇸", altCap:["reykjavík"] }
+  { id:"dk", country:"danmark",capital:"köpenhamn", left:38, top:74, flag:"🇩🇰", altCap:["kopenhamn","copenhagen"] },
+  { id:"fi", country:"finland",capital:"helsingfors",left:65, top:48, flag:"🇫🇮", altCap:["helsinki"] },
+  { id:"is", country:"island", capital:"reykjavik", left:16, top:30, flag:"🇮🇸", altCap:["reykjavík"] }
 ];
-
-const ISLANDS = [
-  { id:"gotland", name:"gotland", left:55, top:68, label:"Ö" },
-  { id:"oland",   name:"öland",   left:53, top:74, label:"Ö" },
-  { id:"aland",   name:"åland",   left:54, top:51, label:"Ö" }
-];
-
-const LAKES = [
-  { id:"vanern",  name:"vänern",  left:43, top:59, label:"Sjö" },
-  { id:"vatttern",name:"vättern", left:46, top:64, label:"Sjö" },
-  { id:"malar",   name:"mälaren", left:47, top:56, label:"Sjö" }
-];
-
-const WATERS = [
-  { id:"ostersjon", name:["östersjön","ostersjon"], left:60, top:64, label:"Hav" },
-  { id:"nordsjon",  name:["nordsjön","nordsjon"],   left:20, top:50, label:"Hav" },
-  { id:"bottenhavet", name:["bottenhavet"],         left:52, top:42, label:"Hav" },
-  { id:"bottenviken", name:["bottenviken"],         left:55, top:31, label:"Vik" },
-  { id:"finska",   name:["finska viken","finskaviken"], left:73, top:50, label:"Vik" },
-  { id:"skagerrak", name:["skagerrak"],             left:32, top:62, label:"Sund" },
-  { id:"kattegatt", name:["kattegatt"],             left:30, top:69, label:"Sund" },
-  { id:"oresund",   name:["öresund","oresund"],     left:37, top:75, label:"Sund" }
-];
-
-const ITEMS = [];
-
-// Länder (land + huvudstad i samma ruta)
-COUNTRIES.forEach(c => {
-  ITEMS.push({
-    id: "country-"+c.id,
-    type: "country",
-    left: c.left,
-    top: c.top,
-    label: "Land + huvudstad",
-    country: c.country,
-    capital: c.capital,
-    altCap: c.altCap || [],
-    flag: c.flag
-  });
-});
 
 // Öar
-ISLANDS.forEach(o => {
-  ITEMS.push({
-    id: "island-"+o.id,
-    type: "island",
-    left: o.left,
-    top: o.top,
-    label: o.label,
-    answers: [o.name]
-  });
-});
+const ISLANDS = [
+  { id:"gotland", name:"gotland", left:60, top:70 },
+  { id:"oland",   name:"öland",   left:56, top:76 },
+  { id:"aland",   name:"åland",   left:55, top:52 }
+];
 
 // Sjöar
-LAKES.forEach(s => {
-  ITEMS.push({
-    id: "lake-"+s.id,
-    type: "lake",
-    left: s.left,
-    top: s.top,
-    label: s.label,
-    answers: [s.name]
-  });
-});
+const LAKES = [
+  { id:"vanern",  name:"vänern",  left:44, top:61 },
+  { id:"vatttern",name:"vättern", left:47, top:66 },
+  { id:"malaren", name:"mälaren", left:49, top:58 }
+];
 
 // Hav / sund / vikar
-WATERS.forEach(w => {
-  ITEMS.push({
-    id: "water-"+w.id,
-    type: "water",
-    left: w.left,
-    top: w.top,
-    label: w.label,
-    answers: Array.isArray(w.name) ? w.name : [w.name]
-  });
-});
+const WATERS = [
+  { id:"ostersjon",   names:["östersjön","ostersjon"], left:66, top:69 },
+  { id:"nordsjon",    names:["nordsjön","nordsjon"],   left:18, top:52 },
+  { id:"bottenhavet", names:["bottenhavet"],          left:55, top:46 },
+  { id:"bottenviken", names:["bottenviken"],          left:57, top:36 },
+  { id:"finskaviken", names:["finska viken","finskaviken"], left:79, top:52 },
+  { id:"skagerrak",   names:["skagerrak"],            left:32, top:63 },
+  { id:"kattegatt",   names:["kattegatt"],            left:32, top:70 },
+  { id:"oresund",     names:["öresund","oresund"],    left:39, top:78 }
+];
 
-// =========================
-// Hjälpfunktioner
-// =========================
-
+// ========= HJÄLP =========
 function normalize(str){
   return str
     .toLowerCase()
@@ -231,133 +208,199 @@ function normalize(str){
     .replace(/[^a-z0-9 ]+/g," ")
     .replace(/\s+/g," ");
 }
-
-const mapEl = document.getElementById("map");
-const scoreEl = document.getElementById("score");
-const state = {}; // id -> {input, flagEl, correct}
-
-// Bygg alla punkter på kartan
-ITEMS.forEach(item => {
-  const wrap = document.createElement("div");
-  wrap.className = "point " + item.type;
-  wrap.style.left = item.left + "%";
-  wrap.style.top  = item.top  + "%";
-
-  const label = document.createElement("div");
-  label.className = "point-label";
-  label.textContent = item.label;
-  wrap.appendChild(label);
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.dataset.id = item.id;
-  input.autocomplete = "off";
-  input.inputMode = "text";
-  if(item.type === "country"){
-    input.placeholder = "t.ex. Sverige Stockholm";
-  }
-  wrap.appendChild(input);
-
-  let flagEl = null;
-  if(item.type === "country"){
-    flagEl = document.createElement("div");
-    flagEl.className = "flag";
-    flagEl.textContent = "";
-    wrap.appendChild(flagEl);
-  }
-
-  mapEl.appendChild(wrap);
-  state[item.id] = { item, input, flagEl, correct:false };
-
-  // Enter = kolla just den rutan
-  input.addEventListener("keydown", e => {
-    if(e.key === "Enter"){
-      checkOne(item.id);
-      input.blur();
-    }
-  });
-
-  input.addEventListener("blur", () => {
-    if(input.value.trim()!==""){
-      checkOne(item.id);
-    }
-  });
-});
-
-// Kolla en ruta
-function checkOne(id){
-  const { item, input, flagEl } = state[id];
-  const val = input.value;
-  const norm = normalize(val);
-  let ok = false;
-
-  if(item.type === "country"){
-    const c = normalize(item.country);
-    const capMain = normalize(item.capital);
-    const altCaps = item.altCap.map(normalize);
-
-    ok = norm.includes(c) &&
-         (norm.includes(capMain) || altCaps.some(a => norm.includes(a)));
-  } else {
-    ok = item.answers.some(ans => normalize(ans) === norm);
-  }
-
-  if(ok){
-    input.classList.remove("wrong");
-    input.classList.add("correct");
-    state[id].correct = true;
-    if(flagEl){
-      flagEl.textContent = item.flag;
-    }
-  } else {
-    input.classList.remove("correct");
-    input.classList.add("wrong");
-    state[id].correct = false;
-  }
-  updateScore();
-}
-
-// Kolla alla
-function checkAll(){
-  Object.keys(state).forEach(id => {
-    if(state[id].input.value.trim()!==""){
-      checkOne(id);
-    }
-  });
-  updateScore();
-}
-
-// Facit
-function showAll(){
-  Object.values(state).forEach(({item,input,flagEl}) => {
-    if(item.type === "country"){
-      input.value = capitalize(item.country) + " " + capitalize(item.capital);
-      if(flagEl) flagEl.textContent = item.flag;
-    } else {
-      input.value = capitalize(item.answers[0]);
-    }
-    input.classList.add("correct");
-    input.classList.remove("wrong");
-    state[item.id].correct = true;
-  });
-  updateScore();
-}
-
-function capitalize(str){
+function cap(str){
   if(!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function updateScore(){
-  const total = ITEMS.length; // 19
-  let correct = 0;
-  Object.values(state).forEach(s => { if(s.correct) correct++; });
-  scoreEl.textContent = `Rätt placerade: ${correct} av ${total}`;
+// ========= BYGG KARTA =========
+const mapEl = document.getElementById("map");
+const scoreEl = document.getElementById("score");
+
+const FIELDS = {}; // id -> info
+
+// Länder: två inputs per land + flagga
+COUNTRIES.forEach(c=>{
+  const cluster = document.createElement("div");
+  cluster.className = "cluster";
+  cluster.style.left = c.left+"%";
+  cluster.style.top  = c.top+"%";
+
+  const labels = document.createElement("div");
+  labels.className = "label-row";
+  const l1 = document.createElement("div");
+  l1.className = "label-pill";
+  l1.textContent = "Land";
+  const l2 = document.createElement("div");
+  l2.className = "label-pill";
+  l2.textContent = "Stad";
+  labels.appendChild(l1); labels.appendChild(l2);
+  cluster.appendChild(labels);
+
+  const row = document.createElement("div");
+  row.className = "field-row";
+
+  const landInput = document.createElement("input");
+  landInput.placeholder = "t.ex. Sverige";
+  landInput.className = "country-input";
+  const capInput = document.createElement("input");
+  capInput.placeholder = "t.ex. Stockholm";
+  capInput.className = "capital-input";
+
+  row.appendChild(landInput);
+  row.appendChild(capInput);
+  cluster.appendChild(row);
+
+  const flagEl = document.createElement("div");
+  flagEl.className = "flag";
+  cluster.appendChild(flagEl);
+
+  mapEl.appendChild(cluster);
+
+  // Registrera fält
+  FIELDS["land-"+c.id] = {
+    type:"land",
+    group:c.id,
+    input:landInput,
+    answers:[c.country],
+    flagEl,
+    flag:c.flag,
+    correct:false
+  };
+  FIELDS["cap-"+c.id] = {
+    type:"capital",
+    group:c.id,
+    input:capInput,
+    answers:[c.capital].concat(c.altCap || []),
+    flagEl,
+    flag:c.flag,
+    correct:false
+  };
+
+  [landInput, capInput].forEach(inp=>{
+    inp.autocomplete="off";
+    inp.inputMode="text";
+    inp.addEventListener("keydown",e=>{
+      if(e.key==="Enter"){ checkOneByInput(inp); inp.blur(); }
+    });
+    inp.addEventListener("blur",()=>{ if(inp.value.trim()!=="") checkOneByInput(inp); });
+  });
+});
+
+// Öar, sjöar, vatten: ett input per punkt
+function addSingle(items, labelText){
+  items.forEach(o=>{
+    const cluster = document.createElement("div");
+    cluster.className = "cluster small";
+    cluster.style.left = o.left+"%";
+    cluster.style.top  = o.top+"%";
+
+    const lab = document.createElement("div");
+    lab.className = "single-label";
+    lab.textContent = labelText;
+    cluster.appendChild(lab);
+
+    const input = document.createElement("input");
+    input.className = "single-input";
+    cluster.appendChild(input);
+
+    mapEl.appendChild(cluster);
+
+    const names = o.names || [o.name];
+
+    const id = labelText.toLowerCase()+"-"+o.id;
+    FIELDS[id] = {
+      type:labelText.toLowerCase(), // "ö" | "sjö" | "hav/sund"
+      input,
+      answers:names,
+      correct:false
+    };
+
+    input.autocomplete="off";
+    input.inputMode="text";
+    input.addEventListener("keydown",e=>{
+      if(e.key==="Enter"){ checkOneByInput(input); input.blur(); }
+    });
+    input.addEventListener("blur",()=>{ if(input.value.trim()!=="") checkOneByInput(input); });
+  });
 }
 
-// Koppla knappar
-document.getElementById("checkAllBtn").addEventListener("click", checkAll);
-document.getElementById("showAllBtn").addEventListener("click", showAll);
+addSingle(ISLANDS,"Ö");
+addSingle(LAKES,"Sjö");
+addSingle(WATERS,"Hav");
+
+// ========= KONTROLL =========
+function checkOneByInput(input){
+  const entryId = Object.keys(FIELDS).find(id => FIELDS[id].input === input);
+  if(entryId) checkOne(entryId);
+}
+
+function checkOne(id){
+  const field = FIELDS[id];
+  const val = field.input.value;
+  const norm = normalize(val);
+  if(!norm){
+    field.input.classList.remove("correct","wrong");
+    field.correct=false;
+    updateScore();
+    return;
+  }
+  const ok = field.answers.some(a => normalize(a) === norm);
+  field.correct = ok;
+
+  if(ok){
+    field.input.classList.add("correct");
+    field.input.classList.remove("wrong");
+    if(field.flagEl && field.type==="land"){
+      field.flagEl.textContent = field.flag;
+    }
+  }else{
+    field.input.classList.add("wrong");
+    field.input.classList.remove("correct");
+    if(field.flagEl && field.type==="land"){
+      field.flagEl.textContent = "";
+    }
+  }
+  updateScore();
+}
+
+function checkAll(){
+  Object.keys(FIELDS).forEach(id=>{
+    const f = FIELDS[id];
+    if(f.input.value.trim()!=="") checkOne(id);
+  });
+  updateScore();
+}
+
+function showKey(){
+  Object.keys(FIELDS).forEach(id=>{
+    const f = FIELDS[id];
+    const answer = f.answers[0];
+    if(f.type==="land" || f.type==="capital" || f.type==="ö" || f.type==="sjö" || f.type==="hav"){
+      f.input.value = cap(answer);
+    }else{
+      f.input.value = cap(answer);
+    }
+    f.input.classList.add("correct");
+    f.input.classList.remove("wrong");
+    f.correct = true;
+    if(f.flagEl && f.type==="land"){
+      f.flagEl.textContent = f.flag;
+    }
+  });
+  updateScore();
+}
+
+function updateScore(){
+  const totalFields = Object.keys(FIELDS).length; // 24 fält
+  let correctCount = 0;
+  Object.values(FIELDS).forEach(f=>{ if(f.correct) correctCount++; });
+  scoreEl.textContent =
+    `Rätt svar: ${correctCount} av ${totalFields} (5 länder + 5 huvudstäder + 3 öar + 3 sjöar + 8 hav/sund/vikar)`;
+}
+
+document.getElementById("checkAll").addEventListener("click",checkAll);
+document.getElementById("showKey").addEventListener("click",showKey);
 </script>
 </body>
 </html>
