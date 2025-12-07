@@ -1,649 +1,752 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Norden – karta</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  body{
-    margin:0;
-    padding:10px;
-    font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-    background:#f4f4f4;
-  }
-  h1{
-    text-align:center;
-    font-size:1.4rem;
-    margin:4px 0 2px;
-  }
-  .subtitle{
-    text-align:center;
-    font-size:0.85rem;
-    color:#555;
-    margin-bottom:8px;
-  }
-  .map-wrapper{
-    max-width:420px;
-    margin:0 auto 8px;
-    padding:8px;
-    background:#fff;
-    border-radius:16px;
-    box-shadow:0 2px 6px rgba(0,0,0,.15);
-  }
-  .map{
-    position:relative;
-    width:100%;
-    aspect-ratio:3/4;
-    border-radius:12px;
-    background:#eee url("nordenkarta.png") center/contain no-repeat;
-    overflow:hidden;
-  }
+  <meta charset="UTF-8">
+  <title>Vikingatiden – Träningsapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #1a73e8;
+      --primary-light: #e3f2fd;
+      --text: #222222;
+      --muted: #777777;
+      --border: #dde3ee;
+      --correct: #2e7d32;
+      --wrong: #c62828;
+    }
 
-  .pin{
-    position:absolute;
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    background:#222;
-    color:#fff;
-    font-size:0.7rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transform:translate(-50%,-50%);
-    box-shadow:0 1px 3px rgba(0,0,0,.4);
-    cursor:pointer;
-  }
-  .pin.correct{
-    background:#2a8f2a;
-  }
-  .pin.correct-warning{
-    background:#2a8f2a;
-    border:2px solid #ffcc00;
-  }
-  .pin.correct-warning::after{
-    content:"⚠";
-    position:absolute;
-    top:-6px;
-    right:-6px;
-    font-size:0.6rem;
-  }
-  .pin.wrong{
-    background:#c33;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  #score{
-    max-width:420px;
-    margin:0 auto 6px;
-    font-size:0.85rem;
-    font-weight:600;
-    text-align:center;
-  }
-  #globalButtons{
-    max-width:420px;
-    margin:0 auto 8px;
-    display:flex;
-    gap:6px;
-  }
-  button{
-    flex:1;
-    padding:8px 0;
-    border:none;
-    border-radius:999px;
-    font-size:0.9rem;
-    cursor:pointer;
-  }
-  #checkAllBtn{ background:#007aff; color:#fff; }
-  #resetBtn{ background:#d0d0d0; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-  /* Bottenpanel */
-  #panel{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    background:#fff;
-    border-radius:18px 18px 0 0;
-    box-shadow:0 -2px 10px rgba(0,0,0,.25);
-    padding:10px 14px 14px;
-    max-width:480px;
-    margin:0 auto;
-    transform:translateY(100%);
-    transition:transform 0.2s ease-out;
-  }
-  #panel.visible{
-    transform:translateY(0);
-  }
-  #panelTitle{
-    font-size:0.95rem;
-    font-weight:600;
-    margin-bottom:4px;
-  }
-  #panelHint{
-    font-size:0.8rem;
-    color:#555;
-    margin-bottom:6px;
-  }
-  #panelFields{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-bottom:6px;
-  }
-  .fieldRow{
-    display:flex;
-    gap:4px;
-    align-items:center;
-  }
-  .fieldLabel{
-    font-size:0.8rem;
-    width:70px;
-  }
-  .fieldInput{
-    flex:1;
-    min-width:120px;
-    font-size:0.9rem;
-    padding:4px 6px;
-    border-radius:6px;
-    border:1px solid #aaa;
-  }
-  .fieldInput.correct{
-    border:2px solid #2a8f2a;
-    background:#d2f4d2;
-  }
-  .fieldInput.wrong{
-    border:2px solid #c33;
-    background:#f8d6d6;
-  }
-  #panelButtons{
-    display:flex;
-    gap:6px;
-    margin-top:4px;
-  }
-  #checkPlaceBtn{
-    background:#007aff;
-    color:#fff;
-  }
-  #showAnswersBtn{
-    background:#ffcc00;
-  }
-  #closePanelBtn{
-    background:#e0e0e0;
-  }
-  #panelMsg{
-    font-size:0.8rem;
-    margin-top:4px;
-    color:#333;
-  }
-</style>
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 14px 16px 10px;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 12px 12px 20px;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 4px 4px 10px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 4px 10px;
+    }
+
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px 12px 10px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(148,163,184,0.35);
+    }
+
+    .flashcard {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .flash-main {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .flash-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .flash-back {
+      display: none;
+      font-size: 14px;
+    }
+
+    .flashcard.flipped .flash-main,
+    .flashcard.flipped .flash-sub {
+      display: none;
+    }
+
+    .flashcard.flipped .flash-back {
+      display: block;
+    }
+
+    .flash-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .q-text {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .answer {
+      display: none;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .card.show-answer .answer {
+      display: block;
+    }
+
+    .small-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 12px;
+      background: #f9fafb;
+      cursor: pointer;
+    }
+
+    .small-btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .tf-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tf-btn {
+      flex: 1;
+      padding: 8px 0;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .tf-btn.correct {
+      border-color: var(--correct);
+      background: #e8f5e9;
+      color: var(--correct);
+      font-weight: 600;
+    }
+
+    .tf-btn.wrong {
+      border-color: var(--wrong);
+      background: #ffebee;
+      color: var(--wrong);
+      font-weight: 600;
+    }
+
+    .tf-feedback {
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .card.show-feedback .tf-feedback {
+      display: block;
+    }
+
+    .tf-feedback.correct {
+      color: var(--correct);
+    }
+
+    .tf-feedback.wrong {
+      color: var(--wrong);
+    }
+
+    .talk-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .talk-q {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .talk-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #020617;
+        color: #e5e7eb;
+      }
+      header {
+        background: #020617;
+        box-shadow: 0 1px 0 rgba(148,163,184,0.4);
+      }
+      .tab-btn {
+        background: #020617;
+        color: #e5e7eb;
+      }
+      .tab-btn.active {
+        background: var(--primary);
+        color: #fff;
+      }
+      .card {
+        background: #020617;
+        border-color: rgba(148,163,184,0.6);
+        box-shadow: 0 1px 4px rgba(15,23,42,0.8);
+      }
+      .small-btn {
+        background: #020617;
+        color: #e5e7eb;
+      }
+      .tf-btn {
+        background: #020617;
+        color: #e5e7eb;
+      }
+    }
+  </style>
 </head>
 <body>
+<div class="app">
+  <header>
+    <h1>Vikingatiden</h1>
+    <p>Träna ord, frågor och begrepp.</p>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showSection('bildstod', this)">Bildstöd</button>
+      <button class="tab-btn" onclick="showSection('fragor', this)">Instuderingsfrågor</button>
+      <button class="tab-btn" onclick="showSection('santfalskt', this)">Sant eller falskt</button>
+      <button class="tab-btn" onclick="showSection('begrepp', this)">Begrepp</button>
+      <button class="tab-btn" onclick="showSection('prata', this)">Prata-frågor</button>
+      <button class="tab-btn" onclick="showSection('lankar', this)">Länktips</button>
+    </div>
+  </header>
 
-<h1>Norden – karta</h1>
-<div class="subtitle">Tryck på en siffra, skriv i rutan och kolla platsen.</div>
+  <main>
+    <!-- BILDSTÖD / ORDLISTA -->
+    <section id="bildstod" class="active">
+      <h2 class="section-title">Bildstöd – ord</h2>
+      <p class="hint">Tryck på ett kort för att se en kort förklaring.</p>
+      <div class="card-list" id="bildstod-list"></div>
+    </section>
 
-<div class="map-wrapper">
-  <div class="map" id="map"></div>
-</div>
+    <!-- INSTUDERINGSFRÅGOR -->
+    <section id="fragor">
+      <h2 class="section-title">Instuderingsfrågor</h2>
+      <p class="hint">Läs frågan. Försök svara själv. Tryck sedan på “Visa svar”.</p>
+      <div class="card-list" id="fragor-list"></div>
+    </section>
 
-<div id="score"></div>
+    <!-- SANT / FALSKT -->
+    <section id="santfalskt">
+      <h2 class="section-title">Sant eller falskt</h2>
+      <p class="hint">Läs påståendet. Välj Sant eller Falskt.</p>
+      <div class="card-list" id="santfalskt-list"></div>
+    </section>
 
-<div id="globalButtons">
-  <button id="checkAllBtn">Kolla resultat</button>
-  <button id="resetBtn">Nollställ</button>
-</div>
+    <!-- BEGREPP -->
+    <section id="begrepp">
+      <h2 class="section-title">Begrepp</h2>
+      <p class="hint">Tryck på ett begrepp för att läsa en enkel förklaring.</p>
+      <div class="card-list" id="begrepp-list"></div>
+    </section>
 
-<!-- Panel för vald plats -->
-<div id="panel">
-  <div id="panelTitle"></div>
-  <div id="panelHint"></div>
-  <div id="panelFields"></div>
-  <div id="panelButtons">
-    <button id="checkPlaceBtn">Kolla plats</button>
-    <button id="showAnswersBtn">Visa rätt svar</button>
-    <button id="closePanelBtn">Stäng</button>
-  </div>
-  <div id="panelMsg"></div>
+    <!-- PRATA-FRÅGOR -->
+    <section id="prata">
+      <h2 class="section-title">Prata-frågor</h2>
+      <p class="hint">Öva muntligt med en kompis eller vuxen.</p>
+      <div class="talk-list" id="prata-list"></div>
+    </section>
+
+    <!-- LÄNKTIPS -->
+    <section id="lankar">
+      <h2 class="section-title">Länktips</h2>
+      <p class="hint">Fråga din lärare om fler bra länkar.</p>
+      <div class="card-list">
+        <div class="card">
+          <div class="badge">Tips</div>
+          <p style="font-size:14px; margin:0 0 4px;">
+            Din lärare kan lägga in länkar här, till exempel:
+          </p>
+          <ul style="margin:4px 0 0; padding-left:18px; font-size:13px;">
+            <li>En kort film om vikingatiden</li>
+            <li>En sida med bilder på Birka och Uppåkra</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
 <script>
-// ======== Hjälpfunktioner =========
-function normalize(str){
-  return str
-    .toLowerCase()
-    .trim()
-    .replaceAll("å","a")
-    .replaceAll("ä","a")
-    .replaceAll("ö","o")
-    .replaceAll("´","")
-    .replaceAll("`","")
-    .replaceAll("’","")
-    .replace(/[^a-z0-9 ]+/g," ")
-    .replace(/\s+/g," ");
-}
-function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
-
-// ======== 19 platser =========
-// labelShort visas i panelen – innehåller INTE svaret.
-const PLACES = [
-  // 1–5: land + huvudstad
-  {
-    num:1,
-    type:"country",
-    labelShort:"Land + huvudstad",
-    left:53, top:66,
-    parts:[
-      {id:"sverige-land",  label:"Land", answers:["sverige"]},
-      {id:"sverige-stad",  label:"Stad", answers:["stockholm"]}
-    ]
-  },
-  {
-    num:2,
-    type:"country",
-    labelShort:"Land + huvudstad",
-    left:37, top:63,
-    parts:[
-      {id:"norge-land",    label:"Land", answers:["norge"]},
-      {id:"norge-stad",    label:"Stad", answers:["oslo"]}
-    ]
-  },
-  {
-    num:3,
-    type:"country",
-    labelShort:"Land + huvudstad",
-    left:39, top:84,
-    parts:[
-      {id:"danmark-land",  label:"Land", answers:["danmark"]},
-      {id:"danmark-stad",  label:"Stad", answers:["köpenhamn","kopenhamn","copenhagen"]}
-    ]
-  },
-  {
-    num:4,
-    type:"country",
-    labelShort:"Land + huvudstad",
-    left:76, top:60,
-    parts:[
-      {id:"finland-land",  label:"Land", answers:["finland"]},
-      {id:"finland-stad",  label:"Stad", answers:["helsingfors","helsinki"]}
-    ]
-  },
-  {
-    num:5,
-    type:"country",
-    labelShort:"Land + huvudstad",
-    left:19, top:34,
-    parts:[
-      {id:"island-land",   label:"Land", answers:["island"]},
-      {id:"island-stad",   label:"Stad", answers:["reykjavik","reykjavík"]}
-    ]
-  },
-
-  // 6–8: öar
-  {
-    num:6,
-    type:"island",
-    labelShort:"Ö",
-    left:63, top:76,
-    parts:[ {id:"gotland", label:"Namn", answers:["gotland"] } ]
-  },
-  {
-    num:7,
-    type:"island",
-    labelShort:"Ö",
-    left:59, top:80,
-    parts:[ {id:"oland", label:"Namn", answers:["öland","oland"] } ]
-  },
-  {
-    num:8,
-    type:"island",
-    labelShort:"Ö",
-    left:65, top:67,
-    parts:[ {id:"aland", label:"Namn", answers:["åland","aland"] } ]
-  },
-
-  // 9–11: sjöar
-  {
-    num:9,
-    type:"lake",
-    labelShort:"Sjö",
-    left:48, top:75,
-    parts:[ {id:"vanern", label:"Namn", answers:["vänern","vanern"] } ]
-  },
-  {
-    num:10,
-    type:"lake",
-    labelShort:"Sjö",
-    left:51, top:78,
-    parts:[ {id:"vatttern", label:"Namn", answers:["vättern","vatttern"] } ]
-  },
-  {
-    num:11,
-    type:"lake",
-    labelShort:"Sjö",
-    left:57, top:70,
-    parts:[ {id:"malaren", label:"Namn", answers:["mälaren","malaren"] } ]
-  },
-
-  // 12–19: hav / sund / vikar
-  {
-    num:12,
-    type:"water",
-    labelShort:"Hav",
-    left:65, top:85,
-    parts:[ {id:"ostersjon", label:"Namn", answers:["östersjön","ostersjon"] } ]
-  },
-  {
-    num:13,
-    type:"water",
-    labelShort:"Hav",
-    left:19, top:82,
-    parts:[ {id:"nordsjon", label:"Namn", answers:["nordsjön","nordsjon"] } ]
-  },
-  {
-    num:14,
-    type:"water",
-    labelShort:"Hav",
-    left:63, top:60,
-    parts:[ {id:"bottenhavet", label:"Namn", answers:["bottenhavet"] } ]
-  },
-  {
-    num:15,
-    type:"water",
-    labelShort:"Vik",
-    left:71, top:48,
-    parts:[ {id:"bottenviken", label:"Namn", answers:["bottenviken"] } ]
-  },
-   {
-    num:16,
-    type:"water",
-    labelShort:"Hav",
-    left:28, top:48,
-    parts:[ {id:"Norska havet", label:"Namn", answers:["Norska havet"] } ]
-  },
-  {
-    num:17,
-    type:"water",
-    labelShort:"Sund",
-    left:32, top:77,
-    parts:[ {id:"skagerrak", label:"Namn", answers:["skagerrak"] } ]
-  },
-  {
-    num:18,
-    type:"water",
-    labelShort:"Sund",
-    left:41, top:77,
-    parts:[ {id:"kattegatt", label:"Namn", answers:["kattegatt"] } ]
-  },
-  {
-    num:19,
-    type:"water",
-    labelShort:"Sund",
-    left:46, top:82,
-    parts:[ {id:"oresund", label:"Namn", answers:["öresund","oresund"] } ]
-  }
-];
-
-// ======== STATE =========
-const fields = [];         // ett fält per textinput
-const placeState = {};     // per plats: försök, använd facit, någonsin fel
-
-PLACES.forEach(place=>{
-  placeState[place.num] = {attempts:0, usedHint:false, everWrong:false};
-  place.parts.forEach(part=>{
-    fields.push({
-      placeNum: place.num,
-      partId: part.id,
-      label: part.label,
-      answers: part.answers,
-      value:"",
-      correct:false,
-      revealed:false
+  // -------- Navigation between sections --------
+  function showSection(id, btn) {
+    document.querySelectorAll("section").forEach(sec => {
+      sec.classList.toggle("active", sec.id === id);
     });
-  });
-});
-
-let activePlaceNum = null;
-
-// ======== Bygg kartan =========
-const mapEl = document.getElementById("map");
-const scoreEl = document.getElementById("score");
-
-PLACES.forEach(place=>{
-  const pin = document.createElement("div");
-  pin.className = "pin";
-  pin.style.left = place.left + "%";
-  pin.style.top  = place.top + "%";
-  pin.textContent = place.num;
-  pin.dataset.num = place.num;
-  pin.addEventListener("click", ()=>openPanel(place.num));
-  mapEl.appendChild(pin);
-});
-
-// ======== Panel =========
-const panel = document.getElementById("panel");
-const panelTitle = document.getElementById("panelTitle");
-const panelHint = document.getElementById("panelHint");
-const panelFields = document.getElementById("panelFields");
-const panelMsg = document.getElementById("panelMsg");
-
-document.getElementById("checkPlaceBtn").addEventListener("click", ()=>{
-  if(activePlaceNum!=null){
-    readInputsFromPanel();
-    checkPlace(activePlaceNum, true);
-    updateScore();
-  }
-});
-
-document.getElementById("showAnswersBtn").addEventListener("click", ()=>{
-  if(activePlaceNum!=null){
-    revealPlace(activePlaceNum);
-    renderPanelFields(activePlaceNum);
-    updatePinClass(activePlaceNum);
-    updateScore();
-  }
-});
-
-document.getElementById("closePanelBtn").addEventListener("click", ()=>closePanel());
-
-function openPanel(num){
-  activePlaceNum = num;
-  const place = PLACES.find(p=>p.num===num);
-  panelTitle.textContent = `Plats ${num} – ${place.labelShort}`;
-  panelHint.textContent =
-    place.type==="country"
-      ? "Skriv både land och huvudstad."
-      : "Skriv namnet på platsen.";
-  panelMsg.textContent = "";
-  renderPanelFields(num);
-  panel.classList.add("visible");
-}
-
-function closePanel(){
-  panel.classList.remove("visible");
-  activePlaceNum = null;
-}
-
-function renderPanelFields(num){
-  const placeFields = fields.filter(f=>f.placeNum===num);
-  panelFields.innerHTML = "";
-  placeFields.forEach(f=>{
-    const row = document.createElement("div");
-    row.className = "fieldRow";
-    const lab = document.createElement("div");
-    lab.className = "fieldLabel";
-    lab.textContent = f.label;
-    const inp = document.createElement("input");
-    inp.className = "fieldInput";
-    inp.value = f.value;
-    if(f.correct){
-      inp.classList.add("correct");
-    }else if(f.value){
-      inp.classList.add("wrong");
-    }
-    inp.addEventListener("input", e=>{
-      f.value = e.target.value;
-      f.correct = false;
-      e.target.classList.remove("correct","wrong");
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      b.classList.toggle("active", b === btn);
     });
-    row.appendChild(lab);
-    row.appendChild(inp);
-    panelFields.appendChild(row);
-  });
-}
-
-function readInputsFromPanel(){
-  const inputs = panelFields.querySelectorAll(".fieldRow input");
-  const placeFields = fields.filter(f=>f.placeNum===activePlaceNum);
-  inputs.forEach((inp, idx)=>{
-    const f = placeFields[idx];
-    f.value = inp.value;
-  });
-}
-
-// ======== Rättning =========
-function checkPlace(num, fromPanel=false){
-  const ps = placeState[num];
-  const placeFields = fields.filter(f=>f.placeNum===num);
-
-  ps.attempts++;
-
-  let anyAnswered = false;
-  let allCorrect = true;
-
-  placeFields.forEach(f=>{
-    const norm = normalize(f.value);
-    const ok = f.answers.some(a=>normalize(a)===norm);
-    f.correct = ok;
-    if(norm!=="") anyAnswered = true;
-    if(!ok) allCorrect = false;
-    if(!ok && norm!=="") ps.everWrong = true;
-  });
-
-  if(fromPanel){
-    // uppdatera färg i panel
-    renderPanelFields(num);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
-  if(!anyAnswered){
-    panelMsg.textContent = "Skriv något först.";
-    updatePinClass(num);
-    return;
-  }
-
-  if(allCorrect){
-    if(ps.usedHint || ps.everWrong && ps.attempts>1){
-      panelMsg.textContent = "Rätt – men efter fel/facit. Den markeras med ⚠.";
-    }else{
-      panelMsg.textContent = "Rätt!";
+  // -------- Data --------
+  const bildstodData = [
+    {
+      word: "handelsplats",
+      explain: "Plats där människor köper och säljer saker."
+    },
+    {
+      word: "mytologi",
+      explain: "Gamla berättelser om gudar och hjältar."
+    },
+    {
+      word: "offer",
+      explain: "Gåva till en gud, till exempel mat eller saker."
+    },
+    {
+      word: "runor",
+      explain: "Vikingarnas bokstäver och skrivtecken."
+    },
+    {
+      word: "historiebruk",
+      explain: "När vi använder historia för att berätta eller förklara något idag."
+    },
+    {
+      word: "järn",
+      explain: "Ett hårt metallämne som man gör verktyg och vapen av."
+    },
+    {
+      word: "segel",
+      explain: "Stort tyg på båten som tar tag i vinden."
+    },
+    {
+      word: "runsten",
+      explain: "Stor sten med runor, ofta rest till minne av en person."
     }
-  }else{
-    panelMsg.textContent = "Inte helt rätt ännu.";
-  }
+  ];
 
-  updatePinClass(num);
-}
-
-function revealPlace(num){
-  const ps = placeState[num];
-  ps.usedHint = true;
-  const placeFields = fields.filter(f=>f.placeNum===num);
-  placeFields.forEach(f=>{
-    f.value = f.answers[0];
-    f.correct = true;
-    f.revealed = true;
-  });
-  panelMsg.textContent = "Facit visat. Den här platsen räknas som klar med hjälp.";
-}
-
-function updatePinClass(num){
-  const pin = mapEl.querySelector(`.pin[data-num="${num}"]`);
-  const ps = placeState[num];
-  const placeFields = fields.filter(f=>f.placeNum===num);
-
-  pin.classList.remove("correct","correct-warning","wrong");
-
-  const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
-  const allCorrect = placeFields.every(f=>f.correct);
-
-  if(!anyAnswered){
-    return; // neutral
-  }
-
-  if(allCorrect){
-    if(ps.usedHint || ps.everWrong){
-      pin.classList.add("correct-warning");
-    }else{
-      pin.classList.add("correct");
+  const fragorData = [
+    {
+      q: "1. Vilken händelse och vilket år “startade” vikingatiden?",
+      a: "När vikingar attackerade klostret Lindisfarne år 793 efter Kristus."
+    },
+    {
+      q: "2. Från vilka av dagens länder kom vikingarna?",
+      a: "Från Sverige, Norge och Danmark."
+    },
+    {
+      q: "3. Vilka var de 4 stora grupperna som vikingarna bestod av?",
+      a: "Plundrare, handelsmän, upptäcktsresande och legosoldater."
+    },
+    {
+      q: "4. Vad kallades vikingarnas båtar och vad var speciellt med dessa?",
+      a: "De kallades långskepp. De var långa, smala, lätta och kunde dras upp på land."
+    },
+    {
+      q: "5. Vilka var de två största bosättningarna i “Sverige” på vikingatiden?",
+      a: "Birka i Mälaren och Uppåkra i Skåne."
+    },
+    {
+      q: "6. Hur kunde gravarna se ut på vikingatiden?",
+      a: "Till exempel som stora gravhögar eller stenar som bildar formen av ett skepp."
     }
-  }else{
-    pin.classList.add("wrong");
+  ];
+
+  const santFalsktData = [
+    {
+      text: "De flesta vikingarna kom från dagens Finland.",
+      correct: false,
+      explain: "Falskt. De flesta kom från Sverige, Norge och Danmark."
+    },
+    {
+      text: "Många vikingar kallade sig själva “svenskar, danskar eller norrmän”.",
+      correct: false,
+      explain: "Falskt. De bodde där, men såg sig mer som nordbor eller från en viss by eller hövding."
+    },
+    {
+      text: "Runstenar restes bland annat till minne av döda släktingar.",
+      correct: true,
+      explain: "Sant. Ofta berättar runstenar om en person som har dött."
+    },
+    {
+      text: "Vikingarnas båtar – långskeppen – var särskilt lämpade för grunt vatten.",
+      correct: true,
+      explain: "Sant. De var lätta och kunde segla där det var grunt och dras upp på land."
+    },
+    {
+      text: "Birka och Uppåkra låg i det som vi idag kallar Skåne.",
+      correct: false,
+      explain: "Falskt. Uppåkra ligger i Skåne, men Birka låg i Mälaren nära Stockholm."
+    },
+    {
+      text: "De flesta vikingarna var bönder.",
+      correct: true,
+      explain: "Sant. De flesta levde på jordbruk och bodde hemma på gårdar."
+    }
+  ];
+
+  const begreppData = [
+    {
+      term: "plundrare",
+      explain: "Vikingar som attackerade och tog rikedomar som guld och silver."
+    },
+    {
+      term: "handelsmän",
+      explain: "Vikingar som bytte och sålde varor, till exempel pälsar och järn."
+    },
+    {
+      term: "upptäcktsresande",
+      explain: "Vikingar som reste långt bort och ibland bosatte sig på nya platser."
+    },
+    {
+      term: "legosoldater",
+      explain: "Krigare som arbetade åt en kung eller kejsare och fick betalt."
+    },
+    {
+      term: "långskepp",
+      explain: "Lång, smal vikingabåt som var snabb och lätt att styra."
+    },
+    {
+      term: "Birka",
+      explain: "Stor handelsplats på en ö i Mälaren. Kallas Nordens första stad."
+    },
+    {
+      term: "Uppåkra",
+      explain: "Viktig plats i Skåne där en mäktig hövding troligen bodde."
+    },
+    {
+      term: "hall",
+      explain: "Stort hus där hövdingen hade fester och viktiga möten."
+    }
+  ];
+
+  const prataData = [
+    "Varför var släkten så viktig på vikingatiden? Är släkten lika viktig idag?",
+    "Hur kunde vikingarna klara sig utan pengar? Skulle du klara dig utan pengar? Varför / varför inte?",
+    "Vilket är smartast i längden – att plundra eller att handla med sina grannar? Motivera.",
+    "Vilka skillnader och likheter kan du se mellan vår tid och vikingatiden?"
+  ];
+
+  // -------- Render functions --------
+  function renderBildstod() {
+    const container = document.getElementById("bildstod-list");
+    container.innerHTML = "";
+    bildstodData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card flashcard";
+      card.onclick = () => card.classList.toggle("flipped");
+
+      const label = document.createElement("div");
+      label.className = "flash-label";
+      label.textContent = "Ord";
+
+      const frontMain = document.createElement("div");
+      frontMain.className = "flash-main";
+      frontMain.textContent = item.word;
+
+      const frontSub = document.createElement("div");
+      frontSub.className = "flash-sub";
+      frontSub.textContent = "Tryck för förklaring.";
+
+      const back = document.createElement("div");
+      back.className = "flash-back";
+      back.textContent = item.explain;
+
+      card.appendChild(label);
+      card.appendChild(frontMain);
+      card.appendChild(frontSub);
+      card.appendChild(back);
+      container.appendChild(card);
+    });
   }
-}
 
-// ======== Sammanfattning =========
-function updateScore(){
-  let selfCorrect = 0;
-  let helpOrAfterFail = 0;
-  let wrong = 0;
+  function renderFragor() {
+    const container = document.getElementById("fragor-list");
+    container.innerHTML = "";
+    fragorData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
 
-  PLACES.forEach(place=>{
-    const ps = placeState[place.num];
-    const placeFields = fields.filter(f=>f.placeNum===place.num);
-    const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
-    const allCorrect = placeFields.every(f=>f.correct);
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = "Fråga";
 
-    if(!anyAnswered) return;
+      const q = document.createElement("div");
+      q.className = "q-text";
+      q.textContent = item.q;
 
-    if(allCorrect){
-      if(ps.usedHint || ps.everWrong){
-        helpOrAfterFail++;
-      }else{
-        selfCorrect++;
+      const answer = document.createElement("div");
+      answer.className = "answer";
+      answer.textContent = "Svar: " + item.a;
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "small-btn-row";
+
+      const showBtn = document.createElement("button");
+      showBtn.className = "small-btn primary";
+      showBtn.textContent = "Visa svar";
+      showBtn.onclick = () => {
+        card.classList.toggle("show-answer");
+        showBtn.textContent = card.classList.contains("show-answer")
+          ? "Göm svar"
+          : "Visa svar";
+      };
+
+      btnRow.appendChild(showBtn);
+
+      card.appendChild(badge);
+      card.appendChild(q);
+      card.appendChild(btnRow);
+      card.appendChild(answer);
+
+      container.appendChild(card);
+    });
+  }
+
+  function renderSantFalskt() {
+    const container = document.getElementById("santfalskt-list");
+    container.innerHTML = "";
+    santFalsktData.forEach((item, idx) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = "Sant eller falskt";
+
+      const text = document.createElement("div");
+      text.className = "q-text";
+      text.textContent = item.text;
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "tf-buttons";
+
+      const btnSant = document.createElement("button");
+      btnSant.className = "tf-btn";
+      btnSant.textContent = "Sant";
+
+      const btnFalskt = document.createElement("button");
+      btnFalskt.className = "tf-btn";
+      btnFalskt.textContent = "Falskt";
+
+      const feedback = document.createElement("div");
+      feedback.className = "tf-feedback";
+      feedback.textContent = item.explain;
+
+      function handle(choice) {
+        card.classList.add("show-feedback");
+        const isCorrect = (choice === "sant" && item.correct) ||
+                          (choice === "falskt" && !item.correct);
+
+        btnSant.classList.remove("correct", "wrong");
+        btnFalskt.classList.remove("correct", "wrong");
+        feedback.classList.remove("correct", "wrong");
+
+        if (item.correct) {
+          btnSant.classList.add("correct");
+          btnFalskt.classList.add("wrong");
+        } else {
+          btnSant.classList.add("wrong");
+          btnFalskt.classList.add("correct");
+        }
+
+        if (isCorrect) {
+          feedback.classList.add("correct");
+        } else {
+          feedback.classList.add("wrong");
+        }
       }
-    }else{
-      wrong++;
-    }
-  });
 
-  const total = PLACES.length;
-  const totalDone = selfCorrect + helpOrAfterFail;
+      btnSant.onclick = () => handle("sant");
+      btnFalskt.onclick = () => handle("falskt");
 
-  scoreEl.textContent =
-    `Klara: ${totalDone}/${total}  •  utan hjälp: ${selfCorrect}  •  efter fel/hjälp: ${helpOrAfterFail}  •  fel kvar: ${wrong}`;
-}
+      btnRow.appendChild(btnSant);
+      btnRow.appendChild(btnFalskt);
 
-// ======== Globala knappar =========
-document.getElementById("checkAllBtn").addEventListener("click", ()=>{
-  PLACES.forEach(p=>{
-    const placeFields = fields.filter(f=>f.placeNum===p.num);
-    const anyAnswered = placeFields.some(f=>normalize(f.value)!=="");
-    if(anyAnswered){
-      checkPlace(p.num,false);
-    }
-  });
-  updateScore();
-});
+      card.appendChild(badge);
+      card.appendChild(text);
+      card.appendChild(btnRow);
+      card.appendChild(feedback);
 
-document.getElementById("resetBtn").addEventListener("click", ()=>{
-  fields.forEach(f=>{
-    f.value = "";
-    f.correct = false;
-    f.revealed = false;
-  });
-  Object.values(placeState).forEach(ps=>{
-    ps.attempts = 0;
-    ps.usedHint = false;
-    ps.everWrong = false;
-  });
-  mapEl.querySelectorAll(".pin").forEach(p=>{
-    p.classList.remove("correct","correct-warning","wrong");
-  });
-  scoreEl.textContent = "";
-  panelFields.innerHTML = "";
-  panelMsg.textContent = "";
-  panel.classList.remove("visible");
-  activePlaceNum = null;
-});
+      container.appendChild(card);
+    });
+  }
+
+  function renderBegrepp() {
+    const container = document.getElementById("begrepp-list");
+    container.innerHTML = "";
+    begreppData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card flashcard";
+      card.onclick = () => card.classList.toggle("flipped");
+
+      const label = document.createElement("div");
+      label.className = "flash-label";
+      label.textContent = "Begrepp";
+
+      const frontMain = document.createElement("div");
+      frontMain.className = "flash-main";
+      frontMain.textContent = item.term;
+
+      const frontSub = document.createElement("div");
+      frontSub.className = "flash-sub";
+      frontSub.textContent = "Tryck för förklaring.";
+
+      const back = document.createElement("div");
+      back.className = "flash-back";
+      back.textContent = item.explain;
+
+      card.appendChild(label);
+      card.appendChild(frontMain);
+      card.appendChild(frontSub);
+      card.appendChild(back);
+
+      container.appendChild(card);
+    });
+  }
+
+  function renderPrata() {
+    const container = document.getElementById("prata-list");
+    container.innerHTML = "";
+    prataData.forEach((text, i) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const q = document.createElement("div");
+      q.className = "talk-q";
+      q.textContent = (i + 1) + ". " + text;
+
+      const note = document.createElement("div");
+      note.className = "talk-note";
+      note.textContent = "Prata om frågan tillsammans. Förklara hur du tänker.";
+
+      card.appendChild(q);
+      card.appendChild(note);
+      container.appendChild(card);
+    });
+  }
+
+  // Init
+  renderBildstod();
+  renderFragor();
+  renderSantFalskt();
+  renderBegrepp();
+  renderPrata();
 </script>
 </body>
 </html>
