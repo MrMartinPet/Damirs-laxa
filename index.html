@@ -280,28 +280,12 @@
     .read-card-title {
       font-size: 16px;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .read-text {
       font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .read-subtitle {
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: 10px;
-      margin-bottom: 4px;
-    }
-
-    .read-text ul {
-      margin: 4px 0 8px;
-      padding-left: 18px;
-    }
-
-    .read-text li {
-      margin-bottom: 2px;
+      line-height: 1.45;
     }
 
     .spell-feedback {
@@ -376,68 +360,91 @@
       <button class="tab-btn" onclick="showSection('fragor', this)">Instuderingsfrågor</button>
       <button class="tab-btn" onclick="showSection('santfalskt', this)">Sant eller falskt</button>
       <button class="tab-btn" onclick="showSection('ordlista', this)">Ordlista</button>
+      <button class="tab-btn" onclick="showSection('stavning', this)">Stava ord</button>
       <button class="tab-btn" onclick="showSection('begrepp', this)">Begrepp</button>
       <button class="tab-btn" onclick="showSection('prata', this)">Prata-frågor</button>
     </div>
   </header>
 
   <main>
-    <!-- LÄSA: LÖPANDE TEXT -->
+    <!-- LÄSA: LÖPANDE TEXT, UPPDELAD I KORT -->
     <section id="text" class="active">
       <h2 class="section-title">Läs om vikingatiden</h2>
-      <p class="hint">Läs texten i lugn takt. Stanna och förklara svåra ord.</p>
-      <div class="card">
-        <div class="read-card-title">Vikingatiden</div>
-        <div class="read-text">
-          <div class="read-subtitle">Vikingatiden börjar</div>
-          <p>
-            Vikingatiden började på riktigt år 793 efter Kristus. Det var då som vikingar attackerade ett kloster som
-            hette Lindisfarne i England. Klostret låg vid havet och var fullt av skatter. Den händelsen gjorde att folk
-            i Europa fick upp ögonen för de nordiska sjöfararna.
-          </p>
+      <p class="hint">Läs ett kort i taget. Pausa och prata om orden.</p>
+      <div class="card-list">
+        <div class="card">
+          <div class="read-card-title">När började vikingatiden?</div>
+          <div class="read-text">
+            Vikingatiden började år 793 efter Kristus. Då attackerade vikingar ett
+            kloster som hette Lindisfarne i England. Klostret låg vid havet och hade
+            mycket skatter. Efter den händelsen blev många människor i Europa
+            rädda för de nordiska sjöfararna.
+          </div>
+        </div>
 
-          <div class="read-subtitle">Vilka var vikingarna?</div>
-          <p>
-            Vikingarna var människor som bodde i de länder vi idag kallar Sverige, Norge och Danmark. Tillsammans
-            kallas detta område för Norden. De var bönder, hantverkare, fiskare och även skickliga båtbyggare. De
-            använde sina långa, smala båtar – långskepp – för att resa långt över haven. Båtarna vägde inte så mycket
-            så vikingarna kunde dra upp dem på land om det behövdes.
-          </p>
+        <div class="card">
+          <div class="read-card-title">Var bodde vikingarna?</div>
+          <div class="read-text">
+            Vikingarna bodde i de länder som vi idag kallar Sverige, Norge och
+            Danmark. Tillsammans kallas området Norden. Många vikingar var
+            bönder. Det fanns också hantverkare, fiskare och duktiga båtbyggare.
+          </div>
+        </div>
 
-          <div class="read-subtitle">Olika grupper av vikingar</div>
-          <p>Man brukar prata om vikingarna som olika sorters grupper när de var ute och reste:</p>
-          <ul>
-            <li><strong>Plundrare (vikingar i strid):</strong> Dessa var krigare som reste ut för att attackera och ta med sig rikedomar som guld, silver och smycken. De var de som skrämde många i Europa. Ordet ”viking” betydde från början ungefär ”sjökrigare” eller ”en som reser ut på plundring”.</li>
-            <li><strong>Handelsmän:</strong> Många vikingar var också smarta affärsmän. De seglade till andra länder för att byta varor. De sålde till exempel pälsar, järn och slavar och köpte silver, kryddor och fina tyger. De hjälpte till att knyta ihop Europa med sina handelsresor.</li>
-            <li><strong>Upptäcktsresande:</strong> En del vikingar gav sig av för att aldrig komma hem. De upptäckte nya områden som de bosatte sig vid, till exempel Island och Färöarna.</li>
-            <li><strong>Legosoldater:</strong> En del vikingar valde att ta anställning hos en rik kung eller kejsare. Där hade de i uppgift att kriga för den kungen eller att vara livvakt.</li>
-          </ul>
+        <div class="card">
+          <div class="read-card-title">Vikingarnas båtar</div>
+          <div class="read-text">
+            Vikingarna använde långa och smala båtar som kallades långskepp.
+            De kunde segla fort över haven. Båtarna vägde inte så mycket, därför
+            kunde vikingarna dra upp dem på land om det behövdes eller om det
+            var grunt vatten.
+          </div>
+        </div>
 
-          <div class="read-subtitle">Viktiga platser: Birka och Uppåkra</div>
-          <p>Vikingatiden handlade inte bara om att resa och plundra – det fanns också stora och viktiga platser där vikingarna bodde och handlade.</p>
+        <div class="card">
+          <div class="read-card-title">Olika sorters vikingar</div>
+          <div class="read-text">
+            Det fanns olika grupper av vikingar:
+            <br><br>
+            • <strong>Plundrare</strong> – krigare som attackerade platser och tog guld, silver
+            och andra rikedomar.<br>
+            • <strong>Handelsmän</strong> – bytte varor, till exempel pälsar och järn, mot silver,
+            kryddor och tyger.<br>
+            • <strong>Upptäcktsresande</strong> – reste långt bort, till exempel till Island, och
+            flyttade dit.<br>
+            • <strong>Legosoldater</strong> – krigade för en kung eller kejsare och arbetade som
+            livvakter.
+          </div>
+        </div>
 
-          <p><strong>1. Birka – Nordens första stad</strong></p>
-          <ul>
-            <li><strong>Var?</strong> Birka låg på en ö i Mälaren, nära Stockholm.</li>
-            <li><strong>Varför var det viktigt?</strong> Birka var en av de första platserna i Norden som man kan kalla en riktig stad. Det var en jättestor handelsplats under vikingatiden.</li>
-            <li><strong>Vad hände där?</strong> Hit kom handelsmän från hela världen – från fjärran öster till Västeuropa – för att byta varor. Man har hittat massor av silvermynt, pärlor och fina tyger som visar hur viktig Birka var för handeln.</li>
-          </ul>
+        <div class="card">
+          <div class="read-card-title">Birka – handelsstad</div>
+          <div class="read-text">
+            Birka låg på en ö i Mälaren, nära dagens Stockholm. Birka var en tidig
+            stad i Norden och en viktig handelsplats. Handelsmän från många
+            länder kom dit för att byta varor. Forskare har hittat silvermynt, pärlor
+            och tyger som visar hur viktig Birka var.
+          </div>
+        </div>
 
-          <p><strong>2. Uppåkra – En plats för hövdingar</strong></p>
-          <ul>
-            <li><strong>Var?</strong> Uppåkra ligger i Skåne (i södra Sverige).</li>
-            <li><strong>Varför var det viktigt?</strong> Uppåkra var en viktig plats under en mycket lång tid, till och med innan vikingatiden började! Under vikingatiden var det troligen en plats där en mäktig hövding eller kung bodde.</li>
-            <li><strong>Vad hände där?</strong> Forskare har grävt fram otroliga saker här, som guld, smycken och ett stort hus som kallas en hall. Hallen användes förmodligen för stora fester och viktiga möten. Det var ett maktcentrum, alltså en plats där de som bestämde bodde.</li>
-          </ul>
+        <div class="card">
+          <div class="read-card-title">Uppåkra – plats för en hövding</div>
+          <div class="read-text">
+            Uppåkra ligger i Skåne i södra Sverige. Platsen var viktig under lång
+            tid, även före vikingatiden. Troligen bodde en mäktig hövding eller
+            kung där. Forskare har hittat guld, smycken och ett stort hus som
+            kallas en hall. I hallen hade man fester och viktiga möten.
+          </div>
+        </div>
 
-          <p>
-            Både Birka och Uppåkra visar hur organiserat vikingasamhället var, med viktiga platser för handel och makt.
-          </p>
-
-          <div class="read-subtitle">Gravar på vikingatiden</div>
-          <p>
-            På vikingatiden kunde gravar till exempel vara stora gravhögar eller stenar som bildar formen av ett skepp.
-          </p>
+        <div class="card">
+          <div class="read-card-title">Gravar på vikingatiden</div>
+          <div class="read-text">
+            På vikingatiden kunde gravar se olika ut. Vissa var stora högar av jord
+            och sten. Andra gravar hade stenar som stod i formen av ett skepp.
+            Gravarna berättar att släkten var viktig och att vissa personer hade
+            mycket makt.
+          </div>
         </div>
       </div>
     </section>
@@ -445,7 +452,7 @@
     <!-- INSTUDERINGSFRÅGOR -->
     <section id="fragor">
       <h2 class="section-title">Instuderingsfrågor</h2>
-      <p class="hint">Läs frågan. Svara först i huvudet eller högt. Tryck sedan på “Visa svar”.</p>
+      <p class="hint">Läs frågan. Svara själv först. Tryck sedan på “Visa svar”.</p>
       <div class="card-list" id="fragor-list"></div>
     </section>
 
@@ -461,12 +468,14 @@
       <h2 class="section-title">Ordlista</h2>
       <p class="hint">Tryck på ett ord för att se en kort förklaring.</p>
       <div class="card-list" id="ordlista-list"></div>
+    </section>
 
-      <div class="card" style="margin-top:12px;">
-        <div class="read-card-title">Stava orden</div>
-        <p class="hint" style="margin:0 0 6px;">
-          Tryck på “Nytt ord”. Lyssna på ordet och skriv hur det stavas.
-        </p>
+    <!-- STAVA ORD (egen sida, utan att visa orden) -->
+    <section id="stavning">
+      <h2 class="section-title">Stava ord</h2>
+      <p class="hint">Tryck på “Nytt ord”. Lyssna och skriv ordet. Ingen rättstavning från telefonen.</p>
+      <div class="card">
+        <div class="read-card-title">Lyssna och stava</div>
         <div class="small-btn-row">
           <button class="small-btn primary" onclick="newSpellWord()">Nytt ord</button>
           <button class="small-btn" onclick="repeatSpellWord()">Lyssna igen</button>
@@ -540,7 +549,7 @@
       osc.start(now);
       osc.stop(now + duration);
     } catch (e) {
-      // om ljud inte stöds gör vi inget
+      // inget om ljud inte funkar
     }
   }
 
