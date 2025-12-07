@@ -11,8 +11,8 @@
       --primary: #1a73e8;
       --primary-light: #e3f2fd;
       --text: #222222;
-      --muted: #777777;
-      --border: #dde3ee;
+      --muted: #555555;
+      --border: #cbd5e1;
       --correct: #2e7d32;
       --wrong: #c62828;
     }
@@ -29,7 +29,7 @@
     }
 
     .app {
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
       min-height: 100vh;
       display: flex;
@@ -37,7 +37,7 @@
     }
 
     header {
-      padding: 14px 16px 10px;
+      padding: 14px 12px 10px;
       background: #ffffff;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       position: sticky;
@@ -47,38 +47,32 @@
 
     header h1 {
       margin: 0 0 4px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
 
     header p {
-      margin: 0;
+      margin: 0 0 8px;
       font-size: 13px;
       color: var(--muted);
     }
 
     .tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      margin-top: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .tabs::-webkit-scrollbar {
-      display: none;
     }
 
     .tab-btn {
-      flex: 0 0 auto;
+      flex: 1 1 45%;
       border: 1px solid var(--border);
-      background: #fff;
+      background: #f9fafb;
       border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
       cursor: pointer;
-      white-space: nowrap;
+      text-align: center;
     }
 
     .tab-btn.active {
@@ -90,7 +84,7 @@
 
     main {
       flex: 1;
-      padding: 12px 12px 20px;
+      padding: 12px 10px 20px;
     }
 
     section {
@@ -102,15 +96,15 @@
     }
 
     .section-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
-      margin: 4px 4px 10px;
+      margin: 4px 4px 8px;
     }
 
     .hint {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--muted);
-      margin: 0 4px 10px;
+      margin: 0 4px 12px;
     }
 
     .card-list {
@@ -121,10 +115,10 @@
 
     .card {
       background: var(--card-bg);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 12px 12px 10px;
       box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
-      border: 1px solid rgba(148,163,184,0.35);
+      border: 1px solid rgba(148,163,184,0.5);
     }
 
     .flashcard {
@@ -146,6 +140,7 @@
     .flash-back {
       display: none;
       font-size: 14px;
+      line-height: 1.35;
     }
 
     .flashcard.flipped .flash-main,
@@ -166,13 +161,14 @@
     }
 
     .q-text {
-      font-size: 14px;
+      font-size: 15px;
       margin-bottom: 6px;
+      line-height: 1.4;
     }
 
     .answer {
       display: none;
-      font-size: 13px;
+      font-size: 14px;
       color: var(--muted);
       margin-top: 6px;
     }
@@ -191,8 +187,8 @@
     .small-btn {
       border-radius: 999px;
       border: 1px solid var(--border);
-      padding: 6px 10px;
-      font-size: 12px;
+      padding: 8px 16px;
+      font-size: 14px;
       background: #f9fafb;
       cursor: pointer;
     }
@@ -223,11 +219,11 @@
 
     .tf-btn {
       flex: 1;
-      padding: 8px 0;
+      padding: 10px 0;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: #f9fafb;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
     }
 
@@ -249,6 +245,7 @@
       font-size: 13px;
       margin-top: 6px;
       display: none;
+      line-height: 1.35;
     }
 
     .card.show-feedback .tf-feedback {
@@ -270,22 +267,69 @@
     }
 
     .talk-q {
-      font-size: 14px;
+      font-size: 15px;
       margin-bottom: 4px;
+      line-height: 1.4;
     }
 
     .talk-note {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--muted);
     }
 
-    a {
-      color: var(--primary);
-      text-decoration: none;
+    .read-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .read-text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .read-subtitle {
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .read-text ul {
+      margin: 4px 0 8px;
+      padding-left: 18px;
+    }
+
+    .read-text li {
+      margin-bottom: 2px;
+    }
+
+    .spell-feedback {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .spell-feedback.correct {
+      color: var(--correct);
+    }
+
+    .spell-feedback.wrong {
+      color: var(--wrong);
+    }
+
+    .spell-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .spell-input-row input {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      outline: none;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -310,11 +354,12 @@
         border-color: rgba(148,163,184,0.6);
         box-shadow: 0 1px 4px rgba(15,23,42,0.8);
       }
-      .small-btn {
+      .small-btn,
+      .tf-btn {
         background: #020617;
         color: #e5e7eb;
       }
-      .tf-btn {
+      .spell-input-row input {
         background: #020617;
         color: #e5e7eb;
       }
@@ -325,29 +370,82 @@
 <div class="app">
   <header>
     <h1>Vikingatiden</h1>
-    <p>Träna ord, frågor och begrepp.</p>
+    <p>Träna ord, frågor och läsa text.</p>
     <div class="tabs">
-      <button class="tab-btn active" onclick="showSection('bildstod', this)">Bildstöd</button>
+      <button class="tab-btn active" onclick="showSection('text', this)">Läs om vikingatiden</button>
       <button class="tab-btn" onclick="showSection('fragor', this)">Instuderingsfrågor</button>
       <button class="tab-btn" onclick="showSection('santfalskt', this)">Sant eller falskt</button>
+      <button class="tab-btn" onclick="showSection('ordlista', this)">Ordlista</button>
       <button class="tab-btn" onclick="showSection('begrepp', this)">Begrepp</button>
       <button class="tab-btn" onclick="showSection('prata', this)">Prata-frågor</button>
-      <button class="tab-btn" onclick="showSection('lankar', this)">Länktips</button>
     </div>
   </header>
 
   <main>
-    <!-- BILDSTÖD / ORDLISTA -->
-    <section id="bildstod" class="active">
-      <h2 class="section-title">Bildstöd – ord</h2>
-      <p class="hint">Tryck på ett kort för att se en kort förklaring.</p>
-      <div class="card-list" id="bildstod-list"></div>
+    <!-- LÄSA: LÖPANDE TEXT -->
+    <section id="text" class="active">
+      <h2 class="section-title">Läs om vikingatiden</h2>
+      <p class="hint">Läs texten i lugn takt. Stanna och förklara svåra ord.</p>
+      <div class="card">
+        <div class="read-card-title">Vikingatiden</div>
+        <div class="read-text">
+          <div class="read-subtitle">Vikingatiden börjar</div>
+          <p>
+            Vikingatiden började på riktigt år 793 efter Kristus. Det var då som vikingar attackerade ett kloster som
+            hette Lindisfarne i England. Klostret låg vid havet och var fullt av skatter. Den händelsen gjorde att folk
+            i Europa fick upp ögonen för de nordiska sjöfararna.
+          </p>
+
+          <div class="read-subtitle">Vilka var vikingarna?</div>
+          <p>
+            Vikingarna var människor som bodde i de länder vi idag kallar Sverige, Norge och Danmark. Tillsammans
+            kallas detta område för Norden. De var bönder, hantverkare, fiskare och även skickliga båtbyggare. De
+            använde sina långa, smala båtar – långskepp – för att resa långt över haven. Båtarna vägde inte så mycket
+            så vikingarna kunde dra upp dem på land om det behövdes.
+          </p>
+
+          <div class="read-subtitle">Olika grupper av vikingar</div>
+          <p>Man brukar prata om vikingarna som olika sorters grupper när de var ute och reste:</p>
+          <ul>
+            <li><strong>Plundrare (vikingar i strid):</strong> Dessa var krigare som reste ut för att attackera och ta med sig rikedomar som guld, silver och smycken. De var de som skrämde många i Europa. Ordet ”viking” betydde från början ungefär ”sjökrigare” eller ”en som reser ut på plundring”.</li>
+            <li><strong>Handelsmän:</strong> Många vikingar var också smarta affärsmän. De seglade till andra länder för att byta varor. De sålde till exempel pälsar, järn och slavar och köpte silver, kryddor och fina tyger. De hjälpte till att knyta ihop Europa med sina handelsresor.</li>
+            <li><strong>Upptäcktsresande:</strong> En del vikingar gav sig av för att aldrig komma hem. De upptäckte nya områden som de bosatte sig vid, till exempel Island och Färöarna.</li>
+            <li><strong>Legosoldater:</strong> En del vikingar valde att ta anställning hos en rik kung eller kejsare. Där hade de i uppgift att kriga för den kungen eller att vara livvakt.</li>
+          </ul>
+
+          <div class="read-subtitle">Viktiga platser: Birka och Uppåkra</div>
+          <p>Vikingatiden handlade inte bara om att resa och plundra – det fanns också stora och viktiga platser där vikingarna bodde och handlade.</p>
+
+          <p><strong>1. Birka – Nordens första stad</strong></p>
+          <ul>
+            <li><strong>Var?</strong> Birka låg på en ö i Mälaren, nära Stockholm.</li>
+            <li><strong>Varför var det viktigt?</strong> Birka var en av de första platserna i Norden som man kan kalla en riktig stad. Det var en jättestor handelsplats under vikingatiden.</li>
+            <li><strong>Vad hände där?</strong> Hit kom handelsmän från hela världen – från fjärran öster till Västeuropa – för att byta varor. Man har hittat massor av silvermynt, pärlor och fina tyger som visar hur viktig Birka var för handeln.</li>
+          </ul>
+
+          <p><strong>2. Uppåkra – En plats för hövdingar</strong></p>
+          <ul>
+            <li><strong>Var?</strong> Uppåkra ligger i Skåne (i södra Sverige).</li>
+            <li><strong>Varför var det viktigt?</strong> Uppåkra var en viktig plats under en mycket lång tid, till och med innan vikingatiden började! Under vikingatiden var det troligen en plats där en mäktig hövding eller kung bodde.</li>
+            <li><strong>Vad hände där?</strong> Forskare har grävt fram otroliga saker här, som guld, smycken och ett stort hus som kallas en hall. Hallen användes förmodligen för stora fester och viktiga möten. Det var ett maktcentrum, alltså en plats där de som bestämde bodde.</li>
+          </ul>
+
+          <p>
+            Både Birka och Uppåkra visar hur organiserat vikingasamhället var, med viktiga platser för handel och makt.
+          </p>
+
+          <div class="read-subtitle">Gravar på vikingatiden</div>
+          <p>
+            På vikingatiden kunde gravar till exempel vara stora gravhögar eller stenar som bildar formen av ett skepp.
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- INSTUDERINGSFRÅGOR -->
     <section id="fragor">
       <h2 class="section-title">Instuderingsfrågor</h2>
-      <p class="hint">Läs frågan. Försök svara själv. Tryck sedan på “Visa svar”.</p>
+      <p class="hint">Läs frågan. Svara först i huvudet eller högt. Tryck sedan på “Visa svar”.</p>
       <div class="card-list" id="fragor-list"></div>
     </section>
 
@@ -358,10 +456,42 @@
       <div class="card-list" id="santfalskt-list"></div>
     </section>
 
-    <!-- BEGREPP -->
+    <!-- ORDLISTA (20 ord från bildstöd) -->
+    <section id="ordlista">
+      <h2 class="section-title">Ordlista</h2>
+      <p class="hint">Tryck på ett ord för att se en kort förklaring.</p>
+      <div class="card-list" id="ordlista-list"></div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="read-card-title">Stava orden</div>
+        <p class="hint" style="margin:0 0 6px;">
+          Tryck på “Nytt ord”. Lyssna på ordet och skriv hur det stavas.
+        </p>
+        <div class="small-btn-row">
+          <button class="small-btn primary" onclick="newSpellWord()">Nytt ord</button>
+          <button class="small-btn" onclick="repeatSpellWord()">Lyssna igen</button>
+        </div>
+        <div id="spell-current-label" style="font-size:13px; color:var(--muted); margin-top:8px;">
+          Inget ord valt ännu.
+        </div>
+        <div class="spell-input-row">
+          <input id="spell-input"
+                 type="text"
+                 placeholder="Skriv ordet här"
+                 autocomplete="off"
+                 autocorrect="off"
+                 autocapitalize="off"
+                 spellcheck="false">
+          <button class="small-btn primary" onclick="checkSpelling()">Kolla</button>
+        </div>
+        <div id="spell-feedback" class="spell-feedback"></div>
+      </div>
+    </section>
+
+    <!-- BEGREPP (övriga) -->
     <section id="begrepp">
       <h2 class="section-title">Begrepp</h2>
-      <p class="hint">Tryck på ett begrepp för att läsa en enkel förklaring.</p>
+      <p class="hint">Tryck på ett begrepp för att se en enkel förklaring.</p>
       <div class="card-list" id="begrepp-list"></div>
     </section>
 
@@ -370,24 +500,6 @@
       <h2 class="section-title">Prata-frågor</h2>
       <p class="hint">Öva muntligt med en kompis eller vuxen.</p>
       <div class="talk-list" id="prata-list"></div>
-    </section>
-
-    <!-- LÄNKTIPS -->
-    <section id="lankar">
-      <h2 class="section-title">Länktips</h2>
-      <p class="hint">Fråga din lärare om fler bra länkar.</p>
-      <div class="card-list">
-        <div class="card">
-          <div class="badge">Tips</div>
-          <p style="font-size:14px; margin:0 0 4px;">
-            Din lärare kan lägga in länkar här, till exempel:
-          </p>
-          <ul style="margin:4px 0 0; padding-left:18px; font-size:13px;">
-            <li>En kort film om vikingatiden</li>
-            <li>En sida med bilder på Birka och Uppåkra</li>
-          </ul>
-        </div>
-      </div>
     </section>
   </main>
 </div>
@@ -401,43 +513,81 @@
     document.querySelectorAll(".tab-btn").forEach(b => {
       b.classList.toggle("active", b === btn);
     });
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  // -------- Simple feedback sounds (Web Audio) --------
+  let audioCtx = null;
+
+  function playFeedback(isCorrect) {
+    try {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        audioCtx = new AudioContext();
+      }
+      const duration = 0.18;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = isCorrect ? 880 : 220;
+      gain.gain.value = 0.2;
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+      osc.start(now);
+      osc.stop(now + duration);
+    } catch (e) {
+      // om ljud inte stöds gör vi inget
+    }
+  }
+
+  // -------- Talsyntes för stavning --------
+  function speakWord(word) {
+    if (!word) return;
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'sv-SE';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
   }
 
   // -------- Data --------
-  const bildstodData = [
-    {
-      word: "handelsplats",
-      explain: "Plats där människor köper och säljer saker."
-    },
-    {
-      word: "mytologi",
-      explain: "Gamla berättelser om gudar och hjältar."
-    },
-    {
-      word: "offer",
-      explain: "Gåva till en gud, till exempel mat eller saker."
-    },
-    {
-      word: "runor",
-      explain: "Vikingarnas bokstäver och skrivtecken."
-    },
-    {
-      word: "historiebruk",
-      explain: "När vi använder historia för att berätta eller förklara något idag."
-    },
-    {
-      word: "järn",
-      explain: "Ett hårt metallämne som man gör verktyg och vapen av."
-    },
-    {
-      word: "segel",
-      explain: "Stort tyg på båten som tar tag i vinden."
-    },
-    {
-      word: "runsten",
-      explain: "Stor sten med runor, ofta rest till minne av en person."
-    }
+  // 20 ord från ordlistan (bildstöd)
+  const ordlistaData = [
+    { word: "viking", explain: "En person från Norden som levde på vikingatiden och ofta reste med båt." },
+    { word: "Norden", explain: "Område i norra Europa där bland annat Sverige, Norge och Danmark ligger." },
+    { word: "långskepp", explain: "Lång, smal vikingabåt som var snabb och lätt att styra och dra upp på land." },
+    { word: "arkeolog", explain: "Person som forskar om hur människor levde förr genom att gräva fram saker." },
+    { word: "fynd", explain: "En sak man hittar, ofta gammal och spännande." },
+    { word: "självhushållning", explain: "När en familj eller gård mest använder sådant de själva odlar och gör." },
+    { word: "träl", explain: "En ofri person på vikingatiden, ungefär som en slav." },
+    { word: "långhus", explain: "Ett långt trähus där människor och ibland djur kunde bo tillsammans." },
+    { word: "byteshandel", explain: "När man byter saker med varandra i stället för att betala med pengar." },
+    { word: "gravfält", explain: "Ett område med många gravar på samma plats." },
+    { word: "Birka", explain: "Stor handelsplats på en ö i Mälaren. Kallas ibland Nordens första stad." },
+    { word: "missionär", explain: "Person som reser för att sprida sin religion, till exempel kristendomen." },
+    { word: "handelsplats", explain: "Plats där människor köper och säljer saker." },
+    { word: "mytologi", explain: "Gamla berättelser om gudar och hjältar." },
+    { word: "offer", explain: "Gåva till en gud, till exempel mat eller saker." },
+    { word: "runor", explain: "Vikingarnas bokstäver och skrivtecken." },
+    { word: "historiebruk", explain: "När vi använder historia för att berätta eller förklara något idag." },
+    { word: "järn", explain: "Ett hårt metallämne som man gör verktyg och vapen av." },
+    { word: "segel", explain: "Stort tyg på båten som tar tag i vinden." },
+    { word: "runsten", explain: "Stor sten med runor, ofta rest till minne av en person." }
+  ];
+
+  // Övriga begrepp, utöver ordlistan
+  const begreppData = [
+    { term: "plundrare", explain: "Vikingar som attackerade och tog rikedomar som guld och silver." },
+    { term: "handelsmän", explain: "Vikingar som bytte och sålde varor, till exempel pälsar och järn." },
+    { term: "upptäcktsresande", explain: "Vikingar som reste långt bort och ibland bosatte sig på nya platser." },
+    { term: "legosoldater", explain: "Krigare som arbetade åt en kung eller kejsare och fick betalt." },
+    { term: "Uppåkra", explain: "Viktig plats i Skåne där en mäktig hövding troligen bodde." },
+    { term: "hall", explain: "Stort hus där hövdingen hade fester och viktiga möten." }
   ];
 
   const fragorData = [
@@ -500,41 +650,6 @@
     }
   ];
 
-  const begreppData = [
-    {
-      term: "plundrare",
-      explain: "Vikingar som attackerade och tog rikedomar som guld och silver."
-    },
-    {
-      term: "handelsmän",
-      explain: "Vikingar som bytte och sålde varor, till exempel pälsar och järn."
-    },
-    {
-      term: "upptäcktsresande",
-      explain: "Vikingar som reste långt bort och ibland bosatte sig på nya platser."
-    },
-    {
-      term: "legosoldater",
-      explain: "Krigare som arbetade åt en kung eller kejsare och fick betalt."
-    },
-    {
-      term: "långskepp",
-      explain: "Lång, smal vikingabåt som var snabb och lätt att styra."
-    },
-    {
-      term: "Birka",
-      explain: "Stor handelsplats på en ö i Mälaren. Kallas Nordens första stad."
-    },
-    {
-      term: "Uppåkra",
-      explain: "Viktig plats i Skåne där en mäktig hövding troligen bodde."
-    },
-    {
-      term: "hall",
-      explain: "Stort hus där hövdingen hade fester och viktiga möten."
-    }
-  ];
-
   const prataData = [
     "Varför var släkten så viktig på vikingatiden? Är släkten lika viktig idag?",
     "Hur kunde vikingarna klara sig utan pengar? Skulle du klara dig utan pengar? Varför / varför inte?",
@@ -543,38 +658,6 @@
   ];
 
   // -------- Render functions --------
-  function renderBildstod() {
-    const container = document.getElementById("bildstod-list");
-    container.innerHTML = "";
-    bildstodData.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card flashcard";
-      card.onclick = () => card.classList.toggle("flipped");
-
-      const label = document.createElement("div");
-      label.className = "flash-label";
-      label.textContent = "Ord";
-
-      const frontMain = document.createElement("div");
-      frontMain.className = "flash-main";
-      frontMain.textContent = item.word;
-
-      const frontSub = document.createElement("div");
-      frontSub.className = "flash-sub";
-      frontSub.textContent = "Tryck för förklaring.";
-
-      const back = document.createElement("div");
-      back.className = "flash-back";
-      back.textContent = item.explain;
-
-      card.appendChild(label);
-      card.appendChild(frontMain);
-      card.appendChild(frontSub);
-      card.appendChild(back);
-      container.appendChild(card);
-    });
-  }
-
   function renderFragor() {
     const container = document.getElementById("fragor-list");
     container.innerHTML = "";
@@ -621,7 +704,7 @@
   function renderSantFalskt() {
     const container = document.getElementById("santfalskt-list");
     container.innerHTML = "";
-    santFalsktData.forEach((item, idx) => {
+    santFalsktData.forEach(item => {
       const card = document.createElement("div");
       card.className = "card";
 
@@ -650,8 +733,10 @@
 
       function handle(choice) {
         card.classList.add("show-feedback");
-        const isCorrect = (choice === "sant" && item.correct) ||
-                          (choice === "falskt" && !item.correct);
+
+        const isCorrect =
+          (choice === "sant" && item.correct) ||
+          (choice === "falskt" && !item.correct);
 
         btnSant.classList.remove("correct", "wrong");
         btnFalskt.classList.remove("correct", "wrong");
@@ -670,6 +755,8 @@
         } else {
           feedback.classList.add("wrong");
         }
+
+        playFeedback(isCorrect);
       }
 
       btnSant.onclick = () => handle("sant");
@@ -682,6 +769,39 @@
       card.appendChild(text);
       card.appendChild(btnRow);
       card.appendChild(feedback);
+
+      container.appendChild(card);
+    });
+  }
+
+  function renderOrdlista() {
+    const container = document.getElementById("ordlista-list");
+    container.innerHTML = "";
+    ordlistaData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card flashcard";
+      card.onclick = () => card.classList.toggle("flipped");
+
+      const label = document.createElement("div");
+      label.className = "flash-label";
+      label.textContent = "Ord";
+
+      const frontMain = document.createElement("div");
+      frontMain.className = "flash-main";
+      frontMain.textContent = item.word;
+
+      const frontSub = document.createElement("div");
+      frontSub.className = "flash-sub";
+      frontSub.textContent = "Tryck för förklaring.";
+
+      const back = document.createElement("div");
+      back.className = "flash-back";
+      back.textContent = item.explain;
+
+      card.appendChild(label);
+      card.appendChild(frontMain);
+      card.appendChild(frontSub);
+      card.appendChild(back);
 
       container.appendChild(card);
     });
@@ -741,10 +861,58 @@
     });
   }
 
+  // -------- Stavningsträning --------
+  let currentSpellWord = null;
+
+  function newSpellWord() {
+    const index = Math.floor(Math.random() * ordlistaData.length);
+    currentSpellWord = ordlistaData[index].word;
+    const label = document.getElementById("spell-current-label");
+    const input = document.getElementById("spell-input");
+    const feedback = document.getElementById("spell-feedback");
+
+    label.textContent = "Lyssna på ordet och skriv hur det stavas.";
+    input.value = "";
+    feedback.textContent = "";
+    feedback.className = "spell-feedback";
+
+    speakWord(currentSpellWord);
+  }
+
+  function repeatSpellWord() {
+    if (!currentSpellWord) return;
+    speakWord(currentSpellWord);
+  }
+
+  function checkSpelling() {
+    if (!currentSpellWord) return;
+    const input = document.getElementById("spell-input");
+    const feedback = document.getElementById("spell-feedback");
+
+    const user = (input.value || "").trim().toLowerCase();
+    const correct = currentSpellWord.toLowerCase();
+
+    if (!user) {
+      feedback.textContent = "Skriv ordet först.";
+      feedback.className = "spell-feedback wrong";
+      return;
+    }
+
+    if (user === correct) {
+      feedback.textContent = "Rätt! Ordet stavas: " + currentSpellWord;
+      feedback.className = "spell-feedback correct";
+      playFeedback(true);
+    } else {
+      feedback.textContent = "Inte riktigt. Ordet stavas: " + currentSpellWord;
+      feedback.className = "spell-feedback wrong";
+      playFeedback(false);
+    }
+  }
+
   // Init
-  renderBildstod();
   renderFragor();
   renderSantFalskt();
+  renderOrdlista();
   renderBegrepp();
   renderPrata();
 </script>
