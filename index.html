@@ -118,7 +118,8 @@
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
-      overflow:hidden;
+      overflow:auto;
+      padding-bottom:2px;
     }
 
     button{
@@ -261,7 +262,7 @@
     }
 
     .back .faceText{
-      font-size:20px;
+      font-size:19px;
       font-weight:850;
     }
 
@@ -306,7 +307,7 @@
       }
 
       .back .faceText{
-        font-size:18px;
+        font-size:17px;
       }
     }
   </style>
@@ -335,7 +336,7 @@
 
         <button class="menuBtn" onclick="startCategory('kartan')">
           Kartan
-          <span>Norge, Finland, Kebnekaise</span>
+          <span>Kebnekaise, Norge, Finland</span>
         </button>
 
         <button class="menuBtn" onclick="startCategory('stader')">
@@ -343,29 +344,34 @@
           <span>9 städer</span>
         </button>
 
+        <button class="menuBtn" onclick="startCategory('havSjoar')">
+          Hav och sjöar
+          <span>Vatten runt Sverige</span>
+        </button>
+
         <button class="menuBtn" onclick="startCategory('vatten')">
           Vatten
-          <span>Hav, sjöar och bruk</span>
+          <span>Var, varför och användning</span>
         </button>
 
         <button class="menuBtn" onclick="startCategory('berg')">
           Berg
-          <span>Fjäll, malm och gruvdrift</span>
+          <span>Var, varför och användning</span>
         </button>
 
-        <button class="menuBtn" onclick="startCategory('manniskor')">
-          Människor
-          <span>Befolkning och ålder</span>
+        <button class="menuBtn green" onclick="startCategory('befolkning')">
+          Befolkning
+          <span>Antal, plats och ålder</span>
         </button>
 
         <button class="menuBtn green" onclick="startCategory('begrepp')">
           Begrepp
-          <span>Viktiga ord</span>
+          <span>Alla viktiga ord</span>
         </button>
 
         <button class="menuBtn yellow" onclick="startCategory('alla')">
           Alla kort
-          <span>Allt blandat</span>
+          <span>Allt från sida 1</span>
         </button>
       </div>
     </main>
@@ -413,19 +419,19 @@
         cards:[
           {
             q:"Vilka är Sveriges tre landsdelar?",
-            a:"Götaland, Svealand och Norrland."
+            a:"Sveriges tre landsdelar är Götaland, Svealand och Norrland."
           },
           {
-            q:"Vilken landsdel ligger längst söderut?",
-            a:"Götaland."
+            q:"Vad heter den landsdel som ligger i södra Sverige?",
+            a:"Den landsdel som ligger i södra Sverige heter Götaland."
           },
           {
-            q:"Vilken landsdel ligger i mitten?",
-            a:"Svealand."
+            q:"Vad heter den landsdel som ligger i mellersta Sverige?",
+            a:"Den landsdel som ligger i mellersta Sverige heter Svealand."
           },
           {
-            q:"Vilken landsdel ligger längst norrut?",
-            a:"Norrland."
+            q:"Vad heter den landsdel som ligger i norra Sverige?",
+            a:"Den landsdel som ligger i norra Sverige heter Norrland."
           }
         ]
       },
@@ -434,20 +440,16 @@
         title:"Kartan",
         cards:[
           {
+            q:"Var ligger Kebnekaise ungefär?",
+            a:"Kebnekaise ligger ungefär i norra Sverige, i fjällområdet i Lappland."
+          },
+          {
             q:"Var ligger Norge i relation till Sverige?",
             a:"Norge ligger väster om Sverige."
           },
           {
             q:"Var ligger Finland i relation till Sverige?",
-            a:"Finland ligger öster och nordost om Sverige."
-          },
-          {
-            q:"Vad heter Sveriges högsta berg?",
-            a:"Kebnekaise."
-          },
-          {
-            q:"Var ligger Kebnekaise ungefär?",
-            a:"I norra Sverige, i Lappland."
+            a:"Finland ligger öster eller nordost om Sverige."
           }
         ]
       },
@@ -457,19 +459,21 @@
         cards:[
           {
             q:"Nämn 9 städer i Norrland.",
-            a:"Kiruna, Luleå, Umeå, Sundsvall, Östersund, Skellefteå, Örnsköldsvik, Gävle och Boden."
+            a:"Nio exempel på städer i Norrland är Kiruna, Luleå, Umeå, Sundsvall, Östersund, Skellefteå, Örnsköldsvik, Gävle och Boden."
+          }
+        ]
+      },
+
+      havSjoar:{
+        title:"Hav och sjöar",
+        cards:[
+          {
+            q:"Vilka hav och vatten omger Sverige?",
+            a:"Sverige omges av Bottenviken, Bottenhavet, Östersjön, Öresund, Kattegatt och Skagerack."
           },
           {
-            q:"Nämn tre städer i Norrland.",
-            a:"Till exempel Kiruna, Luleå och Umeå."
-          },
-          {
-            q:"Nämn tre andra städer i Norrland.",
-            a:"Till exempel Sundsvall, Östersund och Skellefteå."
-          },
-          {
-            q:"Nämn tre till städer i Norrland.",
-            a:"Till exempel Örnsköldsvik, Gävle och Boden."
+            q:"Vilka är Sveriges fyra största sjöar?",
+            a:"Sveriges fyra största sjöar är Vänern, Vättern, Mälaren och Hjälmaren."
           }
         ]
       },
@@ -478,44 +482,44 @@
         title:"Vatten",
         cards:[
           {
-            q:"Vilka hav och vatten omger Sverige?",
-            a:"Bottenviken, Bottenhavet, Östersjön, Öresund, Kattegatt och Skagerack."
+            q:"Var i Sverige finns det mycket vatten?",
+            a:"Det finns mycket vatten runt Sveriges kuster och i områden med många sjöar och älvar. Sverige har också grundvatten nere i marken."
           },
           {
-            q:"Vilka är Sveriges fyra största sjöar?",
-            a:"Vänern, Vättern, Mälaren och Hjälmaren."
+            q:"Varför är vatten viktigt?",
+            a:"Vatten är viktigt eftersom människor, djur och växter behöver det för att leva. Vi använder också vatten till mat, hygien, energi och natur."
+          },
+          {
+            q:"Vad kan vatten användas till?",
+            a:"Vatten kan användas till dricksvatten, vattenkraft, fiske och annat som människor, djur, växter och natur behöver."
           },
           {
             q:"Vilka olika typer av vatten ska du kunna?",
-            a:"Saltvatten, sötvatten och grundvatten."
+            a:"Du ska kunna saltvatten, sötvatten och grundvatten."
           },
           {
             q:"Vad är saltvatten?",
-            a:"Vatten med salt. Det finns i hav."
+            a:"Saltvatten är vatten med salt i. Det finns i haven runt Sverige."
           },
           {
             q:"Vad är sötvatten?",
-            a:"Vatten med lite eller inget salt. Det finns i sjöar och älvar."
+            a:"Sötvatten är vatten med lite eller inget salt. Det finns till exempel i sjöar och älvar."
           },
           {
             q:"Vad är grundvatten?",
-            a:"Vatten som finns nere i marken."
+            a:"Grundvatten är vatten som finns nere i marken."
           },
           {
-            q:"Vad kan vi få från vatten?",
-            a:"Dricksvatten, energi från vattenkraft och fisk."
+            q:"Vad betyder hållbart vattenbruk?",
+            a:"Hållbart vattenbruk betyder att vi använder vatten och det som finns i vattnet utan att förstöra för naturen, människor eller framtiden."
+          },
+          {
+            q:"Vad är överfiske?",
+            a:"Överfiske betyder att man fiskar för mycket, så att fiskarna riskerar att minska kraftigt eller försvinna från ett område."
           },
           {
             q:"Vad är vattenkraft?",
-            a:"Energi eller el som skapas med hjälp av rinnande vatten."
-          },
-          {
-            q:"Vad betyder överfiske?",
-            a:"Att man fiskar så mycket att fisken riskerar att minska för mycket."
-          },
-          {
-            q:"Förklara hållbart vattenbruk.",
-            a:"Att använda vatten, fisk och andra vattenresurser utan att förstöra för framtiden."
+            a:"Vattenkraft är energi eller el som skapas med hjälp av rinnande vatten."
           }
         ]
       },
@@ -524,78 +528,70 @@
         title:"Berg",
         cards:[
           {
-            q:"Var finns det mycket berg i Sverige?",
-            a:"I fjällen och i norra Sverige."
+            q:"Var i Sverige finns det mycket berg?",
+            a:"Det finns mycket berg i fjällen och i norra Sverige."
           },
           {
-            q:"Vad är fjäll?",
-            a:"Bergsområden, framför allt i norra Sverige."
+            q:"Varför finns det mycket berg där?",
+            a:"I norra Sverige finns fjäll och stora bergsområden. Därför är berg en viktig del av landskapet där."
           },
           {
-            q:"Vad är malm?",
-            a:"Berg eller sten som innehåller metall."
-          },
-          {
-            q:"Vad är gruvdrift?",
-            a:"När man bryter malm ur marken."
+            q:"Varför är berg viktigt?",
+            a:"Berg är viktigt eftersom vi kan få resurser från berg, till exempel malm. Berg och fjäll är också viktiga delar av Sveriges natur."
           },
           {
             q:"Vad kan vi få från berg?",
-            a:"Malm och metaller genom gruvdrift."
+            a:"Från berg kan vi få malm. Malm kan innehålla metaller som människor kan använda."
           },
           {
-            q:"Förklara hållbart bergsbruk.",
-            a:"Att använda berg och malm utan att skada människor, natur och framtid mer än nödvändigt."
+            q:"Vad är fjäll?",
+            a:"Fjäll är bergsområden, framför allt i norra Sverige."
+          },
+          {
+            q:"Vad är malm?",
+            a:"Malm är berg eller sten som innehåller metall."
+          },
+          {
+            q:"Vad är gruvdrift?",
+            a:"Gruvdrift är när människor bryter malm eller andra ämnen ur berg och mark."
+          },
+          {
+            q:"Vad betyder hållbart bergsbruk?",
+            a:"Hållbart bergsbruk betyder att vi använder berg och resurser från berg på ett sätt som tar hänsyn till natur, människor och framtiden."
           }
         ]
       },
 
-      manniskor:{
-        title:"Människor",
+      befolkning:{
+        title:"Befolkning",
         cards:[
           {
-            q:"Ungefär hur många människor bor i Sverige?",
-            a:"Ungefär 10 miljoner människor."
+            q:"Hur många människor bor ungefär i Sverige?",
+            a:"Det bor ungefär 10 miljoner människor i Sverige."
           },
           {
-            q:"Var finns det flest människor i Sverige?",
-            a:"I södra Sverige och i större tätorter."
+            q:"Var i Sverige finns det flest människor?",
+            a:"Det finns flest människor i södra Sverige och i större tätorter."
           },
           {
-            q:"Varför bor flest människor där?",
-            a:"För att det finns fler jobb, skolor, service, vägar och städer där."
+            q:"Varför finns det flest människor just där?",
+            a:"Där finns ofta fler jobb, skolor, vägar, vård, affärer och annan service. Därför bor många människor där."
           },
           {
-            q:"Vad betyder befolkning?",
-            a:"Människorna som bor i ett land eller område."
+            q:"Vad betyder det att Sveriges befolkning lever allt längre?",
+            a:"Det betyder att människor i Sverige i genomsnitt blir äldre än tidigare."
           },
           {
-            q:"Vad betyder befolkningstäthet?",
-            a:"Hur många människor som bor på en viss yta."
+            q:"Vilka konsekvenser kan det få att människor lever längre?",
+            a:"När människor lever längre blir det fler äldre i samhället. Då behövs mer vård, omsorg och pengar till pensioner."
           },
           {
-            q:"Vad betyder landsbygd?",
-            a:"Områden utanför städer och tätorter."
+            q:"Hur kan ålder påverka Sveriges befolkning?",
+            a:"Om det finns många äldre påverkar det samhället. Fler kan behöva hjälp och vård, medan färre kanske arbetar."
           },
           {
-            q:"Vad betyder tätort?",
-            a:"En plats där många hus och människor finns samlade."
-          },
-          {
-            q:"Vad betyder urbanisering?",
-            a:"Att fler människor flyttar till städer."
-          },
-          {
-            q:"Vad betyder flyktingar?",
-            a:"Människor som har tvingats lämna sitt hem eller land."
-          },
-          {
-            q:"Vad betyder det att vi lever allt längre?",
-            a:"Att människor i Sverige i genomsnitt blir äldre än tidigare."
-          },
-          {
-            q:"Vilka konsekvenser kan det få att vi lever allt längre?",
-            a:"Det blir fler äldre. Då behövs mer vård, omsorg och pengar till pensioner."
+            q:"Vad behöver man kunna resonera om kring Sveriges befolkning?",
+            a:"Man ska kunna resonera om hur många som bor i Sverige, var flest människor bor, varför de bor där och vad som händer när vi lever längre."
           }
         ]
       },
@@ -604,68 +600,68 @@
         title:"Begrepp",
         cards:[
           {
-            q:"Energi",
-            a:"Kraft som kan användas, till exempel el."
+            q:"Vad betyder energi?",
+            a:"Energi är kraft som kan användas, till exempel till el, värme eller rörelse."
           },
           {
-            q:"Dricksvatten",
-            a:"Vatten som människor kan dricka."
+            q:"Vad betyder dricksvatten?",
+            a:"Dricksvatten är vatten som är rent nog för människor att dricka."
           },
           {
-            q:"Gruvdrift",
-            a:"När man bryter malm ur marken."
+            q:"Vad betyder gruvdrift?",
+            a:"Gruvdrift är när människor bryter malm eller andra ämnen ur berg och mark."
           },
           {
-            q:"Överfiske",
-            a:"När man fiskar för mycket."
+            q:"Vad betyder överfiske?",
+            a:"Överfiske betyder att man fiskar för mycket, så att fiskarna riskerar att minska kraftigt eller försvinna."
           },
           {
-            q:"Saltvatten",
-            a:"Vatten med salt."
+            q:"Vad betyder saltvatten?",
+            a:"Saltvatten är vatten med salt i. Det finns i hav."
           },
           {
-            q:"Sötvatten",
-            a:"Vatten med lite eller inget salt."
+            q:"Vad betyder sötvatten?",
+            a:"Sötvatten är vatten med lite eller inget salt. Det finns i sjöar och älvar."
           },
           {
-            q:"Vattenkraft",
-            a:"Energi från rinnande vatten."
+            q:"Vad betyder vattenkraft?",
+            a:"Vattenkraft är energi eller el som skapas med hjälp av rinnande vatten."
           },
           {
-            q:"Grundvatten",
-            a:"Vatten nere i marken."
+            q:"Vad betyder grundvatten?",
+            a:"Grundvatten är vatten som finns nere i marken."
           },
           {
-            q:"Fjäll",
-            a:"Bergsområden, framför allt i norra Sverige."
+            q:"Vad betyder fjäll?",
+            a:"Fjäll är bergsområden, framför allt i norra Sverige."
           },
           {
-            q:"Malm",
-            a:"Berg eller sten som innehåller metall."
+            q:"Vad betyder malm?",
+            a:"Malm är berg eller sten som innehåller metall."
           },
           {
-            q:"Befolkning",
-            a:"Människorna som bor i ett område."
+            q:"Vad betyder befolkning?",
+            a:"Befolkning är människorna som bor i ett land eller område."
           },
           {
-            q:"Befolkningstäthet",
-            a:"Hur tätt människor bor."
+            q:"Vad betyder befolkningstäthet?",
+            a:"Befolkningstäthet betyder hur tätt människor bor på en viss yta."
           },
           {
-            q:"Landsbygd",
-            a:"Områden utanför städer och tätorter."
+            q:"Vad betyder landsbygd?",
+            a:"Landsbygd är områden utanför städer och större tätorter."
           },
           {
-            q:"Tätort",
-            a:"Plats där många hus och människor finns samlade."
+            q:"Vad betyder tätort?",
+            a:"Tätort är en plats där många hus och människor finns samlade."
           },
           {
-            q:"Urbanisering",
-            a:"När fler människor flyttar till städer."
+            q:"Vad betyder urbanisering?",
+            a:"Urbanisering betyder att fler människor flyttar till städer och tätorter."
           },
           {
-            q:"Flyktingar",
-            a:"Människor som tvingats lämna sitt hem eller land."
+            q:"Vad betyder flyktingar?",
+            a:"Flyktingar är människor som tvingas lämna sitt hem eller land, till exempel på grund av krig eller fara."
           }
         ]
       }
