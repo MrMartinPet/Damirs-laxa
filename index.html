@@ -1,112 +1,141 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Viljas Sverige träning</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Viljas Sverigekoll</title>
+
   <style>
     :root{
-      --bg:#f4f7fb;
+      --bg:#eef4f8;
       --card:#ffffff;
-      --text:#142033;
+      --text:#132033;
       --muted:#667085;
       --blue:#156082;
-      --blue2:#e8f3f7;
-      --green:#2f7d32;
-      --green2:#eaf6eb;
-      --yellow:#f6c453;
+      --blueLight:#e7f3f7;
+      --green:#21803f;
       --red:#b42318;
-      --border:#d8e0ea;
-      --shadow:0 10px 30px rgba(20,32,51,.08);
-      --radius:18px;
+      --yellow:#f6c453;
+      --border:#d9e2ea;
+      --shadow:0 12px 28px rgba(20,32,51,.12);
+      --radius:24px;
     }
 
     *{
       box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
     }
 
     body{
       margin:0;
-      font-family:system-ui, Arial, sans-serif;
-      background:linear-gradient(180deg,#eef6fa 0%,var(--bg) 260px);
+      height:100vh;
+      height:100dvh;
+      overflow:hidden;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      background:linear-gradient(180deg,#dff0f6 0%,var(--bg) 48%);
       color:var(--text);
-      line-height:1.45;
+    }
+
+    .app{
+      height:100dvh;
+      max-width:520px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      padding:14px;
+      gap:10px;
     }
 
     header{
-      padding:28px 18px 18px;
-      max-width:980px;
-      margin:auto;
-    }
-
-    .hero{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:24px;
-      padding:22px;
+      border-radius:var(--radius);
+      padding:14px;
       box-shadow:var(--shadow);
+      flex:0 0 auto;
     }
 
-    .eyebrow{
-      display:inline-block;
-      background:var(--blue2);
+    .topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .badge{
+      background:var(--blueLight);
       color:var(--blue);
-      padding:6px 10px;
+      padding:5px 9px;
       border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .small{
+      color:var(--muted);
       font-size:13px;
-      font-weight:700;
-      margin-bottom:10px;
     }
 
     h1{
-      font-size:clamp(28px,7vw,48px);
-      line-height:1.03;
-      margin:0 0 10px;
+      margin:0;
+      font-size:27px;
+      line-height:1.05;
+      letter-spacing:-.03em;
     }
 
     h2{
-      font-size:25px;
-      margin:0 0 10px;
+      margin:0 0 8px;
+      font-size:24px;
+      letter-spacing:-.02em;
     }
 
     h3{
-      font-size:19px;
-      margin:18px 0 8px;
+      margin:0 0 8px;
+      font-size:18px;
     }
 
     p{
-      margin:8px 0;
+      margin:6px 0;
+      line-height:1.35;
     }
 
-    .muted{
-      color:var(--muted);
+    .screen{
+      display:none;
+      flex:1 1 auto;
+      min-height:0;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    main{
-      max-width:980px;
-      margin:auto;
-      padding:0 18px 60px;
+    .screen.active{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
 
-    .nav{
+    .menuGrid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      grid-template-columns:1fr 1fr;
       gap:10px;
-      margin:18px 0;
+      overflow:hidden;
     }
 
-    button,
-    .nav a{
+    button{
       border:0;
-      border-radius:14px;
+      border-radius:18px;
       padding:13px 14px;
+      font-size:15px;
+      font-weight:850;
       background:var(--blue);
       color:white;
-      font-weight:750;
-      text-decoration:none;
       cursor:pointer;
-      font-size:15px;
-      text-align:center;
+      min-height:48px;
     }
 
     button.secondary{
@@ -115,68 +144,208 @@
       border:1px solid var(--border);
     }
 
-    button.ghost{
-      background:white;
-      color:var(--blue);
-      border:1px solid var(--blue);
+    button.green{
+      background:var(--green);
     }
 
-    button.danger{
+    button.red{
       background:var(--red);
     }
 
-    section{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:18px;
-      margin:14px 0;
-      box-shadow:var(--shadow);
-      scroll-margin-top:12px;
+    button.yellow{
+      background:var(--yellow);
+      color:#332500;
     }
 
-    .grid{
+    .menuBtn{
+      min-height:84px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      text-align:left;
+      gap:5px;
+    }
+
+    .menuBtn span{
+      font-size:12px;
+      font-weight:650;
+      opacity:.85;
+    }
+
+    .navRow{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:auto;
+      flex:0 0 auto;
     }
 
-    .fact{
-      background:#f8fafc;
+    .singleNav{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-top:auto;
+    }
+
+    .studyCard{
+      background:#f7fafc;
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
+      border-radius:22px;
+      padding:16px;
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      gap:10px;
+      flex:1 1 auto;
     }
 
-    .tag{
-      display:inline-block;
+    .bigQuestion{
+      font-size:24px;
+      font-weight:900;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+
+    .answerText{
+      display:none;
+      background:var(--blueLight);
+      color:var(--text);
+      border-radius:18px;
+      padding:12px;
+      font-size:18px;
+      font-weight:750;
+      width:100%;
+    }
+
+    .answerText.show{
+      display:block;
+    }
+
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      justify-content:center;
+      overflow:auto;
+      padding:2px;
+    }
+
+    .pill{
       background:#eef2f6;
       border:1px solid var(--border);
-      padding:5px 9px;
       border-radius:999px;
-      margin:3px;
+      padding:7px 10px;
       font-size:14px;
-      font-weight:650;
+      font-weight:800;
+      white-space:nowrap;
     }
 
-    .quiz{
-      border-top:1px solid var(--border);
-      padding-top:14px;
-      margin-top:14px;
+    .flashWrap{
+      perspective:1000px;
+      flex:1 1 auto;
+      min-height:240px;
+      display:flex;
     }
 
-    .q{
-      background:#fbfcfe;
+    .flashCard{
+      width:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform .55s cubic-bezier(.2,.8,.2,1);
+      cursor:pointer;
+      min-height:240px;
+    }
+
+    .flashCard.flipped{
+      transform:rotateY(180deg);
+    }
+
+    .face{
+      position:absolute;
+      inset:0;
+      border-radius:26px;
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
-      margin:12px 0;
+      box-shadow:var(--shadow);
+      backface-visibility:hidden;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:22px;
+    }
+
+    .front{
+      background:linear-gradient(180deg,#ffffff,#f7fafc);
+    }
+
+    .back{
+      background:linear-gradient(180deg,var(--blueLight),#ffffff);
+      transform:rotateY(180deg);
+    }
+
+    .faceLabel{
+      position:absolute;
+      top:14px;
+      left:14px;
+      font-size:12px;
+      font-weight:900;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+
+    .faceText{
+      font-size:25px;
+      font-weight:950;
+      line-height:1.14;
+      letter-spacing:-.03em;
+    }
+
+    .back .faceText{
+      font-size:21px;
+    }
+
+    .tapHint{
+      position:absolute;
+      bottom:14px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:750;
+    }
+
+    .quizBox{
+      flex:1 1 auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:0;
+    }
+
+    .questionBox{
+      background:#f7fafc;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:16px;
+      text-align:center;
+      min-height:105px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      font-weight:950;
+      line-height:1.15;
     }
 
     .choices{
       display:grid;
-      gap:8px;
-      margin-top:10px;
+      gap:9px;
+      overflow:auto;
+      padding-bottom:2px;
     }
 
     .choice{
@@ -184,11 +353,12 @@
       color:var(--text);
       border:1px solid var(--border);
       text-align:left;
-      font-weight:650;
+      font-weight:850;
+      min-height:46px;
     }
 
     .choice.correct{
-      background:var(--green2);
+      background:#eaf7ee;
       border-color:var(--green);
       color:var(--green);
     }
@@ -199,641 +369,734 @@
       color:var(--red);
     }
 
-    .help,
-    .answer{
-      display:none;
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
+    .status{
+      min-height:32px;
+      font-size:15px;
+      font-weight:850;
+      text-align:center;
+      color:var(--muted);
     }
 
-    .help{
-      background:#fff8e1;
-    }
-
-    .answer{
-      background:var(--green2);
-    }
-
-    textarea{
-      width:100%;
-      min-height:92px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-      font:inherit;
-      resize:vertical;
-      background:white;
-    }
-
-    .progress-wrap{
-      background:#e6edf3;
-      height:14px;
-      border-radius:999px;
-      overflow:hidden;
-      margin-top:14px;
-    }
-
-    .progress{
-      height:100%;
-      width:0%;
-      background:var(--blue);
-      transition:.25s;
-    }
-
-    .scorebox{
-      display:none;
-      padding:14px;
-      border-radius:16px;
-      background:var(--blue2);
+    .score{
+      background:var(--blueLight);
       border:1px solid #b9dce8;
-      margin-top:14px;
-      font-weight:750;
+      border-radius:18px;
+      padding:12px;
+      text-align:center;
+      font-weight:900;
     }
 
-    .exam .helpbtn,
-    .exam .answerbtn{
-      display:none;
-    }
-
-    .footer-note{
+    .counter{
+      text-align:center;
       color:var(--muted);
       font-size:13px;
-      text-align:center;
-      margin-top:28px;
+      font-weight:800;
     }
 
-    @media(max-width:520px){
-      header,
-      main{
-        padding-left:12px;
-        padding-right:12px;
+    @media(max-width:380px){
+      .app{
+        padding:10px;
       }
 
-      section,
-      .hero{
-        padding:15px;
+      h1{
+        font-size:24px;
       }
 
-      button,
-      .nav a{
-        width:100%;
+      .menuBtn{
+        min-height:74px;
+      }
+
+      .faceText{
+        font-size:22px;
+      }
+
+      .back .faceText{
+        font-size:19px;
+      }
+
+      .bigQuestion{
+        font-size:21px;
       }
     }
   </style>
 </head>
 
 <body>
-<header>
-  <div class="hero">
-    <span class="eyebrow">Sverige öva del 2</span>
-    <h1>Viljas Sverige träning</h1>
-    <p><strong>Mål:</strong> kunna både fakta och förklara varför. Inte bara rabbla.</p>
-    <p class="muted">Träna först med hjälp. Kör sedan slutprovet utan hjälp.</p>
+  <div class="app">
+    <header>
+      <div class="topline">
+        <div class="badge">Sverige öva del 2</div>
+        <div class="small" id="headerInfo">Start</div>
+      </div>
+      <h1>Viljas Sverigekoll</h1>
+      <p class="small">Korta frågor. Flashcards. Svara högt.</p>
+    </header>
 
-    <div class="progress-wrap">
-      <div class="progress" id="progress"></div>
-    </div>
+    <main id="home" class="screen active">
+      <h2>Välj träning</h2>
+      <div class="menuGrid">
+        <button class="menuBtn" onclick="openSection('flash')">Flashcards <span>Vänd kort</span></button>
+        <button class="menuBtn" onclick="openSection('quiz')">Snabbfrågor <span>Tryck rätt svar</span></button>
+        <button class="menuBtn" onclick="openSection('oral')">Svara högt <span>Du lyssnar</span></button>
+        <button class="menuBtn" onclick="openSection('lists')">Listor <span>Städer och vatten</span></button>
+        <button class="menuBtn green" onclick="startFinal()">Slutprov <span>Utan hjälp</span></button>
+        <button class="menuBtn yellow" onclick="openSection('guide')">Vad ska hon kunna? <span>Överblick</span></button>
+      </div>
+    </main>
 
-    <p class="muted" id="progressText">0 av 0 frågor klara</p>
+    <section id="flash" class="screen">
+      <h2>Flashcards</h2>
+      <div class="counter" id="flashCounter"></div>
+
+      <div class="flashWrap">
+        <div class="flashCard" id="flashCard" onclick="flipCard()">
+          <div class="face front">
+            <div class="faceLabel">Fråga</div>
+            <div class="faceText" id="flashFront"></div>
+            <div class="tapHint">Tryck för att vända</div>
+          </div>
+          <div class="face back">
+            <div class="faceLabel">Svar</div>
+            <div class="faceText" id="flashBack"></div>
+            <div class="tapHint">Tryck för att vända tillbaka</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="navRow">
+        <button class="secondary" onclick="prevFlash()">Föregående</button>
+        <button onclick="nextFlash()">Nästa kort</button>
+      </div>
+      <button class="secondary" onclick="openSection('home')">Till meny</button>
+    </section>
+
+    <section id="quiz" class="screen">
+      <h2>Snabbfrågor</h2>
+      <div class="quizBox">
+        <div class="counter" id="quizCounter"></div>
+        <div class="questionBox" id="quizQuestion"></div>
+        <div class="choices" id="quizChoices"></div>
+        <div class="status" id="quizStatus"></div>
+      </div>
+      <div class="navRow">
+        <button class="secondary" onclick="openSection('home')">Meny</button>
+        <button onclick="nextQuiz()">Nästa</button>
+      </div>
+    </section>
+
+    <section id="oral" class="screen">
+      <h2>Svara högt</h2>
+      <div class="studyCard">
+        <div class="counter" id="oralCounter"></div>
+        <div class="bigQuestion" id="oralQuestion"></div>
+        <div class="answerText" id="oralAnswer"></div>
+      </div>
+      <div class="navRow">
+        <button class="secondary" onclick="showOralAnswer()">Visa stöd</button>
+        <button onclick="nextOral()">Nästa fråga</button>
+      </div>
+      <button class="secondary" onclick="openSection('home')">Till meny</button>
+    </section>
+
+    <section id="lists" class="screen">
+      <h2>Listor att kunna</h2>
+      <div class="studyCard">
+        <h3 id="listTitle"></h3>
+        <div class="pillRow" id="listContent"></div>
+      </div>
+      <div class="navRow">
+        <button class="secondary" onclick="prevList()">Föregående</button>
+        <button onclick="nextList()">Nästa lista</button>
+      </div>
+      <button class="secondary" onclick="openSection('home')">Till meny</button>
+    </section>
+
+    <section id="guide" class="screen">
+      <h2>Detta ska sitta</h2>
+      <div class="studyCard">
+        <div class="pillRow">
+          <span class="pill">Götaland</span>
+          <span class="pill">Svealand</span>
+          <span class="pill">Norrland</span>
+          <span class="pill">Norge</span>
+          <span class="pill">Finland</span>
+          <span class="pill">Kebnekaise</span>
+          <span class="pill">Norrlands städer</span>
+          <span class="pill">Hav runt Sverige</span>
+          <span class="pill">Största sjöarna</span>
+          <span class="pill">Berg</span>
+          <span class="pill">Vatten</span>
+          <span class="pill">Befolkning</span>
+          <span class="pill">Hållbart bruk</span>
+        </div>
+      </div>
+      <div class="singleNav">
+        <button class="secondary" onclick="openSection('home')">Till meny</button>
+      </div>
+    </section>
+
+    <section id="final" class="screen">
+      <h2>Slutprov</h2>
+      <div class="quizBox">
+        <div class="score" id="finalScore">Poäng: 0</div>
+        <div class="counter" id="finalCounter"></div>
+        <div class="questionBox" id="finalQuestion"></div>
+        <div class="choices" id="finalChoices"></div>
+        <div class="status" id="finalStatus"></div>
+      </div>
+      <div class="navRow">
+        <button class="secondary" onclick="openSection('home')">Avsluta</button>
+        <button onclick="nextFinal()">Nästa</button>
+      </div>
+    </section>
   </div>
 
-  <nav class="nav">
-    <a href="#landsdelar">Landsdelar</a>
-    <a href="#kartan">På kartan</a>
-    <a href="#norrland">Städer i Norrland</a>
-    <a href="#vatten">Vatten</a>
-    <a href="#resonera">Resonera</a>
-    <a href="#begrepp">Begrepp</a>
-    <a href="#slutprov">Slutprov</a>
-  </nav>
-</header>
-
-<main>
-
-  <section id="landsdelar">
-    <h2>1. Sveriges landsdelar</h2>
-
-    <div class="grid">
-      <div class="fact">
-        <strong>Götaland</strong><br>
-        Södra Sverige.
-      </div>
-
-      <div class="fact">
-        <strong>Svealand</strong><br>
-        Mellersta Sverige.
-      </div>
-
-      <div class="fact">
-        <strong>Norrland</strong><br>
-        Norra Sverige. Störst till ytan.
-      </div>
-    </div>
-
-    <div class="quiz">
-      <div class="q" data-answer="Norrland">
-        <strong>Vilken landsdel ligger längst norrut?</strong>
-
-        <div class="choices">
-          <button class="choice">Götaland</button>
-          <button class="choice">Svealand</button>
-          <button class="choice">Norrland</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Götaland">
-        <strong>Vilken landsdel ligger längst söderut?</strong>
-
-        <div class="choices">
-          <button class="choice">Götaland</button>
-          <button class="choice">Svealand</button>
-          <button class="choice">Norrland</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="kartan">
-    <h2>2. Sverige på kartan</h2>
-
-    <div class="grid">
-      <div class="fact">
-        <strong>Norge</strong><br>
-        Ligger väster om Sverige.
-      </div>
-
-      <div class="fact">
-        <strong>Finland</strong><br>
-        Ligger nordost eller öster om Sverige.
-      </div>
-
-      <div class="fact">
-        <strong>Kebnekaise</strong><br>
-        Sveriges högsta berg. Ligger långt norrut i Lappland.
-      </div>
-    </div>
-
-    <div class="quiz">
-      <div class="q" data-answer="Väster om Sverige">
-        <strong>Var ligger Norge i relation till Sverige?</strong>
-
-        <div class="choices">
-          <button class="choice">Väster om Sverige</button>
-          <button class="choice">Söder om Sverige</button>
-          <button class="choice">Mitt i Sverige</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Långt norrut i Lappland">
-        <strong>Var ligger Kebnekaise ungefär?</strong>
-
-        <div class="choices">
-          <button class="choice">I Skåne</button>
-          <button class="choice">Långt norrut i Lappland</button>
-          <button class="choice">På Gotland</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="norrland">
-    <h2>3. Städer i Norrland</h2>
-
-    <p>Du ska känna igen några viktiga städer i Norrland.</p>
-
-    <div>
-      <span class="tag">Kiruna</span>
-      <span class="tag">Luleå</span>
-      <span class="tag">Umeå</span>
-      <span class="tag">Sundsvall</span>
-      <span class="tag">Östersund</span>
-      <span class="tag">Skellefteå</span>
-      <span class="tag">Örnsköldsvik</span>
-      <span class="tag">Gävle</span>
-      <span class="tag">Boden</span>
-    </div>
-
-    <div class="quiz">
-      <div class="q" data-answer="Kiruna">
-        <strong>Vilken av dessa är en stad i Norrland?</strong>
-
-        <div class="choices">
-          <button class="choice">Kiruna</button>
-          <button class="choice">Malmö</button>
-          <button class="choice">Borås</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Umeå">
-        <strong>Vilken stad ligger i Norrland?</strong>
-
-        <div class="choices">
-          <button class="choice">Umeå</button>
-          <button class="choice">Ystad</button>
-          <button class="choice">Halmstad</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="vatten">
-    <h2>4. Hav, vatten och sjöar</h2>
-
-    <h3>Hav och vatten runt Sverige</h3>
-
-    <div>
-      <span class="tag">Bottenviken</span>
-      <span class="tag">Bottenhavet</span>
-      <span class="tag">Östersjön</span>
-      <span class="tag">Öresund</span>
-      <span class="tag">Kattegatt</span>
-      <span class="tag">Skagerack</span>
-    </div>
-
-    <h3>De fyra största sjöarna</h3>
-
-    <div>
-      <span class="tag">Vänern</span>
-      <span class="tag">Vättern</span>
-      <span class="tag">Mälaren</span>
-      <span class="tag">Hjälmaren</span>
-    </div>
-
-    <div class="quiz">
-      <div class="q" data-answer="Vänern">
-        <strong>Vilken är en av Sveriges fyra största sjöar?</strong>
-
-        <div class="choices">
-          <button class="choice">Vänern</button>
-          <button class="choice">Nilen</button>
-          <button class="choice">Medelhavet</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Östersjön">
-        <strong>Vilket vatten ligger öster om Sverige?</strong>
-
-        <div class="choices">
-          <button class="choice">Östersjön</button>
-          <button class="choice">Atlanten</button>
-          <button class="choice">Indiska oceanen</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="resonera">
-    <h2>5. Var finns mycket vatten, berg och människor?</h2>
-
-    <div class="grid">
-      <div class="fact">
-        <strong>Vatten</strong><br>
-        Finns i sjöar, älvar, hav och grundvatten. Viktigt för dricksvatten, energi och natur.
-      </div>
-
-      <div class="fact">
-        <strong>Berg</strong><br>
-        Finns mycket i fjällen och norra Sverige. Där finns också malm och gruvdrift.
-      </div>
-
-      <div class="fact">
-        <strong>Människor</strong><br>
-        Flest bor i södra Sverige och runt tätorter och städer. Där finns jobb, service och kommunikationer.
-      </div>
-    </div>
-
-    <div class="quiz">
-      <div class="q">
-        <strong>Förklara: Varför bor många människor i södra Sverige och i större städer?</strong>
-
-        <textarea placeholder="Skriv ditt svar här"></textarea>
-
-        <button class="secondary helpbtn" onclick="toggleBox(this,'help')">Visa hjälp</button>
-        <button class="ghost answerbtn" onclick="toggleBox(this,'answer')">Visa exempel på svar</button>
-
-        <div class="help">
-          Tänk på jobb, skolor, affärer, sjukhus, vägar och att det ofta är kortare avstånd.
-        </div>
-
-        <div class="answer">
-          Många bor i södra Sverige och i städer eftersom det finns fler jobb, skolor, service och bättre kommunikationer. Det är också närmare mellan platserna.
-        </div>
-      </div>
-
-      <div class="q">
-        <strong>Förklara: Vad kan vi få från vatten?</strong>
-
-        <textarea placeholder="Skriv ditt svar här"></textarea>
-
-        <button class="secondary helpbtn" onclick="toggleBox(this,'help')">Visa hjälp</button>
-        <button class="ghost answerbtn" onclick="toggleBox(this,'answer')">Visa exempel på svar</button>
-
-        <div class="help">
-          Tänk på dricksvatten, el, fiske och transport.
-        </div>
-
-        <div class="answer">
-          Vi kan få dricksvatten, vattenkraft, fisk och möjlighet till transporter. Vatten är också viktigt för djur, växter och människor.
-        </div>
-      </div>
-
-      <div class="q">
-        <strong>Förklara: Vad betyder hållbart vattenbruk?</strong>
-
-        <textarea placeholder="Skriv ditt svar här"></textarea>
-
-        <button class="secondary helpbtn" onclick="toggleBox(this,'help')">Visa hjälp</button>
-        <button class="ghost answerbtn" onclick="toggleBox(this,'answer')">Visa exempel på svar</button>
-
-        <div class="help">
-          Hållbart betyder att vi använder något utan att förstöra för framtiden.
-        </div>
-
-        <div class="answer">
-          Hållbart vattenbruk betyder att vi använder vatten på ett sätt som inte förstör naturen eller tar slut på resurser. Till exempel att inte överfiska och att skydda dricksvatten.
-        </div>
-      </div>
-
-      <div class="q">
-        <strong>Förklara: Vad kan vi få från berg?</strong>
-
-        <textarea placeholder="Skriv ditt svar här"></textarea>
-
-        <button class="secondary helpbtn" onclick="toggleBox(this,'help')">Visa hjälp</button>
-        <button class="ghost answerbtn" onclick="toggleBox(this,'answer')">Visa exempel på svar</button>
-
-        <div class="help">
-          Tänk på malm, gruvor, byggmaterial och fjäll.
-        </div>
-
-        <div class="answer">
-          Från berg kan vi få malm, metaller och stenmaterial. I fjällen finns också natur, turism och viktiga miljöer.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="begrepp">
-    <h2>6. Begreppsträning</h2>
-
-    <p>Kunna säga vad orden betyder med egna ord.</p>
-
-    <div class="grid">
-      <div class="fact"><strong>Saltvatten</strong><br>Vatten med salt. Finns i hav.</div>
-      <div class="fact"><strong>Sötvatten</strong><br>Vatten utan mycket salt. Finns i sjöar, älvar och grundvatten.</div>
-      <div class="fact"><strong>Grundvatten</strong><br>Vatten som finns nere i marken.</div>
-      <div class="fact"><strong>Vattenkraft</strong><br>El som görs med hjälp av rinnande vatten.</div>
-      <div class="fact"><strong>Malm</strong><br>Bergart som innehåller metaller.</div>
-      <div class="fact"><strong>Gruvdrift</strong><br>När man bryter malm och mineraler ur marken.</div>
-      <div class="fact"><strong>Befolkningstäthet</strong><br>Hur många människor som bor på en viss yta.</div>
-      <div class="fact"><strong>Urbanisering</strong><br>När fler människor flyttar till städer.</div>
-      <div class="fact"><strong>Tätort</strong><br>Plats där många hus och människor finns samlade.</div>
-      <div class="fact"><strong>Landsbygd</strong><br>Område utanför städer och tätorter.</div>
-    </div>
-
-    <div class="quiz">
-      <div class="q" data-answer="När fler människor flyttar till städer">
-        <strong>Vad betyder urbanisering?</strong>
-
-        <div class="choices">
-          <button class="choice">När fler människor flyttar till städer</button>
-          <button class="choice">När vatten blir salt</button>
-          <button class="choice">När berg försvinner</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Vatten som finns nere i marken">
-        <strong>Vad är grundvatten?</strong>
-
-        <div class="choices">
-          <button class="choice">Vatten som finns nere i marken</button>
-          <button class="choice">Vatten i moln</button>
-          <button class="choice">Vatten med salt</button>
-        </div>
-      </div>
-
-      <div class="q" data-answer="Hur många människor som bor på en viss yta">
-        <strong>Vad betyder befolkningstäthet?</strong>
-
-        <div class="choices">
-          <button class="choice">Hur många människor som bor på en viss yta</button>
-          <button class="choice">Hur gammal befolkningen är</button>
-          <button class="choice">Hur många sjöar ett land har</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="slutprov" class="exam">
-    <h2>7. Slutprov utan hjälp</h2>
-
-    <p><strong>Regel:</strong> svara utan hjälp. Tryck rätta prov när du är klar.</p>
-
-    <div class="q exam-q" data-answer="Norrland">
-      <strong>1. Vilken landsdel ligger längst norrut?</strong>
-
-      <div class="choices">
-        <button class="choice">Götaland</button>
-        <button class="choice">Svealand</button>
-        <button class="choice">Norrland</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="Väster om Sverige">
-      <strong>2. Var ligger Norge i relation till Sverige?</strong>
-
-      <div class="choices">
-        <button class="choice">Väster om Sverige</button>
-        <button class="choice">Öster om Sverige</button>
-        <button class="choice">Söder om Sverige</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="Kebnekaise">
-      <strong>3. Vad heter Sveriges högsta berg?</strong>
-
-      <div class="choices">
-        <button class="choice">Kebnekaise</button>
-        <button class="choice">Vättern</button>
-        <button class="choice">Skagerack</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="Luleå">
-      <strong>4. Vilken av dessa städer ligger i Norrland?</strong>
-
-      <div class="choices">
-        <button class="choice">Luleå</button>
-        <button class="choice">Lund</button>
-        <button class="choice">Varberg</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="Vänern">
-      <strong>5. Vilken är en av Sveriges största sjöar?</strong>
-
-      <div class="choices">
-        <button class="choice">Vänern</button>
-        <button class="choice">Bottenhavet</button>
-        <button class="choice">Öresund</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="Vatten med salt">
-      <strong>6. Vad är saltvatten?</strong>
-
-      <div class="choices">
-        <button class="choice">Vatten med salt</button>
-        <button class="choice">Vatten under marken</button>
-        <button class="choice">Vatten i sjöar utan salt</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="El som görs med hjälp av rinnande vatten">
-      <strong>7. Vad är vattenkraft?</strong>
-
-      <div class="choices">
-        <button class="choice">El som görs med hjälp av rinnande vatten</button>
-        <button class="choice">När man bryter malm</button>
-        <button class="choice">När människor flyttar till städer</button>
-      </div>
-    </div>
-
-    <div class="q exam-q" data-answer="När fler människor flyttar till städer">
-      <strong>8. Vad betyder urbanisering?</strong>
-
-      <div class="choices">
-        <button class="choice">När fler människor flyttar till städer</button>
-        <button class="choice">När vatten blir dricksvatten</button>
-        <button class="choice">När fjäll blir lägre</button>
-      </div>
-    </div>
-
-    <div class="q">
-      <strong>9. Skrivsvar: Varför bor många människor i städer?</strong>
-      <textarea id="examText1" placeholder="Skriv ditt svar här"></textarea>
-    </div>
-
-    <div class="q">
-      <strong>10. Skrivsvar: Vad betyder hållbart vattenbruk?</strong>
-      <textarea id="examText2" placeholder="Skriv ditt svar här"></textarea>
-    </div>
-
-    <button onclick="gradeExam()">Rätta prov</button>
-    <button class="secondary" onclick="resetExam()">Nollställ prov</button>
-
-    <div class="scorebox" id="scorebox"></div>
-  </section>
-
-  <p class="footer-note">
-    Byggd för snabb träning inför avstämning 2. Fokus: sida 1 i underlaget.
-  </p>
-
-</main>
-
-<script>
-  const answered = new Set();
-
-  function updateProgress(){
-    const total = document.querySelectorAll('.q[data-answer]').length;
-    const done = answered.size;
-    const pct = total ? Math.round(done / total * 100) : 0;
-
-    document.getElementById('progress').style.width = pct + '%';
-    document.getElementById('progressText').textContent = done + ' av ' + total + ' frågor klara';
-  }
-
-  document.querySelectorAll('.q[data-answer] .choice').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const q = btn.closest('.q');
-      const correct = q.dataset.answer;
-
-      q.querySelectorAll('.choice').forEach(b => {
-        b.classList.remove('correct','wrong');
-
-        if(b.textContent.trim() === correct){
+  <script>
+    const flashcards = [
+      {
+        q:"Vilka är Sveriges tre landsdelar?",
+        a:"Götaland, Svealand och Norrland."
+      },
+      {
+        q:"Vilken landsdel ligger längst söderut?",
+        a:"Götaland."
+      },
+      {
+        q:"Vilken landsdel ligger i mitten?",
+        a:"Svealand."
+      },
+      {
+        q:"Vilken landsdel är störst till ytan?",
+        a:"Norrland."
+      },
+      {
+        q:"Var ligger Norge jämfört med Sverige?",
+        a:"Väster om Sverige."
+      },
+      {
+        q:"Var ligger Finland jämfört med Sverige?",
+        a:"Öster och nordost om Sverige."
+      },
+      {
+        q:"Vad heter Sveriges högsta berg?",
+        a:"Kebnekaise."
+      },
+      {
+        q:"Var ligger Kebnekaise ungefär?",
+        a:"Långt norrut i Lappland."
+      },
+      {
+        q:"Nämn 9 städer i Norrland.",
+        a:"Kiruna, Luleå, Umeå, Sundsvall, Östersund, Skellefteå, Örnsköldsvik, Gävle och Boden."
+      },
+      {
+        q:"Vilka vatten omger Sverige?",
+        a:"Bottenviken, Bottenhavet, Östersjön, Öresund, Kattegatt och Skagerack."
+      },
+      {
+        q:"Vilka är Sveriges fyra största sjöar?",
+        a:"Vänern, Vättern, Mälaren och Hjälmaren."
+      },
+      {
+        q:"Var finns det mycket berg i Sverige?",
+        a:"Främst i fjällen och norra Sverige."
+      },
+      {
+        q:"Var bor det flest människor i Sverige?",
+        a:"I södra Sverige och i tätorter runt större städer."
+      },
+      {
+        q:"Vad kan vi få från vatten?",
+        a:"Dricksvatten, energi, fisk, transporter och naturvärden."
+      },
+      {
+        q:"Vad kan vi få från berg?",
+        a:"Malm, metaller, stenmaterial, energi och turism."
+      },
+      {
+        q:"Vad betyder sötvatten?",
+        a:"Vatten med lite eller inget salt, som i sjöar, älvar och grundvatten."
+      },
+      {
+        q:"Vad betyder saltvatten?",
+        a:"Vatten med salt, som i hav."
+      },
+      {
+        q:"Vad är grundvatten?",
+        a:"Vatten som finns nere i marken."
+      },
+      {
+        q:"Vad är vattenkraft?",
+        a:"El som görs med hjälp av rinnande vatten."
+      },
+      {
+        q:"Vad betyder urbanisering?",
+        a:"Att fler människor flyttar till städer."
+      },
+      {
+        q:"Vad betyder befolkningstäthet?",
+        a:"Hur många människor som bor på en viss yta."
+      },
+      {
+        q:"Vad är landsbygd?",
+        a:"Områden utanför städer och tätorter."
+      },
+      {
+        q:"Vad är tätort?",
+        a:"En plats där många hus och människor finns samlade."
+      },
+      {
+        q:"Vad är överfiske?",
+        a:"När man fiskar för mycket så att fiskbestånd kan minska eller skadas."
+      },
+      {
+        q:"Vad betyder hållbart vattenbruk?",
+        a:"Att använda vatten utan att förstöra naturen eller framtidens möjligheter."
+      },
+      {
+        q:"Vad betyder hållbart bergsbruk?",
+        a:"Att utvinna till exempel malm på ett sätt som tar hänsyn till människor, miljö och framtid."
+      },
+      {
+        q:"Vad händer när människor lever längre?",
+        a:"Det blir fler äldre. Då behövs mer vård, omsorg och personal som kan arbeta."
+      }
+    ];
+
+    const quizQuestions = [
+      {
+        q:"Vilka är Sveriges landsdelar?",
+        choices:["Götaland, Svealand, Norrland","Skåne, Småland, Dalarna","Norge, Sverige, Finland"],
+        answer:"Götaland, Svealand, Norrland"
+      },
+      {
+        q:"Vad heter Sveriges högsta berg?",
+        choices:["Kebnekaise","Vättern","Åreskutan"],
+        answer:"Kebnekaise"
+      },
+      {
+        q:"Var ligger Kebnekaise?",
+        choices:["Långt norrut i Lappland","I Skåne","På Öland"],
+        answer:"Långt norrut i Lappland"
+      },
+      {
+        q:"Var ligger Norge?",
+        choices:["Väster om Sverige","Öster om Sverige","Söder om Sverige"],
+        answer:"Väster om Sverige"
+      },
+      {
+        q:"Var ligger Finland?",
+        choices:["Öster och nordost om Sverige","Väster om Sverige","Söder om Danmark"],
+        answer:"Öster och nordost om Sverige"
+      },
+      {
+        q:"Vilken stad ligger i Norrland?",
+        choices:["Kiruna","Malmö","Borås"],
+        answer:"Kiruna"
+      },
+      {
+        q:"Vilken stad ligger i Norrland?",
+        choices:["Umeå","Ystad","Helsingborg"],
+        answer:"Umeå"
+      },
+      {
+        q:"Vilken stad ligger i Norrland?",
+        choices:["Luleå","Lund","Varberg"],
+        answer:"Luleå"
+      },
+      {
+        q:"Vilket vatten ligger öster om Sverige?",
+        choices:["Östersjön","Atlanten","Medelhavet"],
+        answer:"Östersjön"
+      },
+      {
+        q:"Vilken är en av Sveriges största sjöar?",
+        choices:["Vänern","Bottenviken","Kattegatt"],
+        answer:"Vänern"
+      },
+      {
+        q:"Vilka är Sveriges fyra största sjöar?",
+        choices:["Vänern, Vättern, Mälaren, Hjälmaren","Östersjön, Öresund, Kattegatt, Skagerack","Siljan, Bolmen, Roxen, Storsjön"],
+        answer:"Vänern, Vättern, Mälaren, Hjälmaren"
+      },
+      {
+        q:"Var finns mycket berg?",
+        choices:["I fjällen och norra Sverige","Bara i Skåne","Bara i storstäder"],
+        answer:"I fjällen och norra Sverige"
+      },
+      {
+        q:"Var bor flest människor?",
+        choices:["I södra Sverige och större tätorter","På fjälltoppar","Längst ute i havet"],
+        answer:"I södra Sverige och större tätorter"
+      },
+      {
+        q:"Vad kan vi få från vatten?",
+        choices:["Dricksvatten och energi","Malm och stål","Bara sand"],
+        answer:"Dricksvatten och energi"
+      },
+      {
+        q:"Vad kan vi få från berg?",
+        choices:["Malm och metaller","Regnvatten","Fisk"],
+        answer:"Malm och metaller"
+      },
+      {
+        q:"Vad är grundvatten?",
+        choices:["Vatten nere i marken","Vatten med salt","Vatten i moln"],
+        answer:"Vatten nere i marken"
+      },
+      {
+        q:"Vad är vattenkraft?",
+        choices:["El från rinnande vatten","Fiske i havet","Vatten med salt"],
+        answer:"El från rinnande vatten"
+      },
+      {
+        q:"Vad betyder urbanisering?",
+        choices:["Att fler flyttar till städer","Att berg blir högre","Att vatten blir salt"],
+        answer:"Att fler flyttar till städer"
+      },
+      {
+        q:"Vad betyder befolkningstäthet?",
+        choices:["Hur många människor som bor på en viss yta","Hur gammal en person är","Hur många sjöar ett land har"],
+        answer:"Hur många människor som bor på en viss yta"
+      },
+      {
+        q:"Vad är tätort?",
+        choices:["En plats där hus och människor finns samlade","Ett stort berg","Ett salt hav"],
+        answer:"En plats där hus och människor finns samlade"
+      },
+      {
+        q:"Vad är landsbygd?",
+        choices:["Område utanför städer och tätorter","Mitt i en storstad","En sjö i Sverige"],
+        answer:"Område utanför städer och tätorter"
+      },
+      {
+        q:"Vad är överfiske?",
+        choices:["När man fiskar för mycket","När man dricker vatten","När man bygger vägar"],
+        answer:"När man fiskar för mycket"
+      },
+      {
+        q:"Vad betyder hållbart?",
+        choices:["Att använda något utan att förstöra för framtiden","Att använda allt direkt","Att aldrig använda något"],
+        answer:"Att använda något utan att förstöra för framtiden"
+      }
+    ];
+
+    const oralQuestions = [
+      {
+        q:"Nämn 9 städer i Norrland.",
+        a:"Kiruna, Luleå, Umeå, Sundsvall, Östersund, Skellefteå, Örnsköldsvik, Gävle och Boden."
+      },
+      {
+        q:"Vilka vatten omger Sverige?",
+        a:"Bottenviken, Bottenhavet, Östersjön, Öresund, Kattegatt och Skagerack."
+      },
+      {
+        q:"Vad heter Sveriges största sjöar?",
+        a:"Vänern, Vättern, Mälaren och Hjälmaren."
+      },
+      {
+        q:"Vad heter Sveriges högsta berg och var ligger det?",
+        a:"Kebnekaise. Det ligger långt norrut i Lappland."
+      },
+      {
+        q:"Var finns det mest berg i Sverige?",
+        a:"I fjällen och norra Sverige."
+      },
+      {
+        q:"Var finns det flest människor i Sverige?",
+        a:"I södra Sverige och i tätorter runt större städer."
+      },
+      {
+        q:"Varför bor många i städer?",
+        a:"Där finns ofta fler jobb, skolor, vård, affärer och bättre kommunikationer."
+      },
+      {
+        q:"Vad kan vi få från vatten och sjöar?",
+        a:"Dricksvatten, energi, fisk, transporter och naturvärden."
+      },
+      {
+        q:"Vad kan vi få från berg?",
+        a:"Malm, metaller, stenmaterial, naturupplevelser och turism."
+      },
+      {
+        q:"Förklara skillnaden mellan saltvatten och sötvatten.",
+        a:"Saltvatten finns i hav. Sötvatten finns i sjöar, älvar och grundvatten."
+      },
+      {
+        q:"Förklara hållbart vattenbruk.",
+        a:"Att använda vatten utan att förstöra miljön eller framtidens möjligheter."
+      },
+      {
+        q:"Förklara hållbart bergsbruk.",
+        a:"Att utvinna till exempel malm och sten med hänsyn till miljö, människor och framtid."
+      },
+      {
+        q:"Vad händer när människor i Sverige lever längre?",
+        a:"Det blir fler äldre. Då behövs mer vård, omsorg och personer som arbetar."
+      }
+    ];
+
+    const lists = [
+      {
+        title:"9 städer i Norrland",
+        items:["Kiruna","Luleå","Umeå","Sundsvall","Östersund","Skellefteå","Örnsköldsvik","Gävle","Boden"]
+      },
+      {
+        title:"Vatten runt Sverige",
+        items:["Bottenviken","Bottenhavet","Östersjön","Öresund","Kattegatt","Skagerack"]
+      },
+      {
+        title:"Sveriges största sjöar",
+        items:["Vänern","Vättern","Mälaren","Hjälmaren"]
+      },
+      {
+        title:"Vatten ger oss",
+        items:["Dricksvatten","Energi","Fisk","Transporter","Natur","Grundvatten"]
+      },
+      {
+        title:"Berg ger oss",
+        items:["Malm","Metaller","Stenmaterial","Fjäll","Turism","Natur"]
+      },
+      {
+        title:"Viktiga begrepp",
+        items:["Befolkning","Befolkningstäthet","Landsbygd","Tätort","Urbanisering","Flyktingar"]
+      }
+    ];
+
+    let flashIndex = 0;
+    let quizIndex = 0;
+    let oralIndex = 0;
+    let listIndex = 0;
+    let finalIndex = 0;
+    let finalScore = 0;
+    let finalLocked = false;
+
+    function openSection(id){
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      const names = {
+        home:"Start",
+        flash:"Flashcards",
+        quiz:"Snabbfrågor",
+        oral:"Svara högt",
+        lists:"Listor",
+        guide:"Överblick",
+        final:"Slutprov"
+      };
+
+      document.getElementById('headerInfo').textContent = names[id] || '';
+
+      if(id === 'flash'){
+        renderFlash();
+      }
+
+      if(id === 'quiz'){
+        renderQuiz();
+      }
+
+      if(id === 'oral'){
+        renderOral();
+      }
+
+      if(id === 'lists'){
+        renderList();
+      }
+    }
+
+    function renderFlash(){
+      const card = flashcards[flashIndex];
+      document.getElementById('flashFront').textContent = card.q;
+      document.getElementById('flashBack').textContent = card.a;
+      document.getElementById('flashCounter').textContent = (flashIndex + 1) + ' av ' + flashcards.length;
+      document.getElementById('flashCard').classList.remove('flipped');
+    }
+
+    function flipCard(){
+      document.getElementById('flashCard').classList.toggle('flipped');
+    }
+
+    function nextFlash(){
+      flashIndex = (flashIndex + 1) % flashcards.length;
+      renderFlash();
+    }
+
+    function prevFlash(){
+      flashIndex = (flashIndex - 1 + flashcards.length) % flashcards.length;
+      renderFlash();
+    }
+
+    function renderQuiz(){
+      const q = quizQuestions[quizIndex];
+      document.getElementById('quizQuestion').textContent = q.q;
+      document.getElementById('quizCounter').textContent = (quizIndex + 1) + ' av ' + quizQuestions.length;
+      document.getElementById('quizStatus').textContent = '';
+
+      const wrap = document.getElementById('quizChoices');
+      wrap.innerHTML = '';
+
+      q.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.textContent = choice;
+        btn.onclick = () => checkQuiz(btn, choice, q.answer, 'quizStatus', 'quizChoices');
+        wrap.appendChild(btn);
+      });
+    }
+
+    function checkQuiz(btn, choice, answer, statusId, wrapId){
+      const wrap = document.getElementById(wrapId);
+      const status = document.getElementById(statusId);
+
+      wrap.querySelectorAll('button').forEach(b => {
+        b.disabled = true;
+
+        if(b.textContent === answer){
           b.classList.add('correct');
         }
       });
 
-      if(btn.textContent.trim() !== correct){
+      if(choice === answer){
+        status.textContent = 'Rätt';
+        status.style.color = 'var(--green)';
+      }else{
         btn.classList.add('wrong');
+        status.textContent = 'Fel. Rätt svar visas grönt.';
+        status.style.color = 'var(--red)';
+      }
+    }
+
+    function nextQuiz(){
+      quizIndex = (quizIndex + 1) % quizQuestions.length;
+      renderQuiz();
+    }
+
+    function renderOral(){
+      const q = oralQuestions[oralIndex];
+      document.getElementById('oralQuestion').textContent = q.q;
+      document.getElementById('oralAnswer').textContent = q.a;
+      document.getElementById('oralAnswer').classList.remove('show');
+      document.getElementById('oralCounter').textContent = (oralIndex + 1) + ' av ' + oralQuestions.length;
+    }
+
+    function showOralAnswer(){
+      document.getElementById('oralAnswer').classList.toggle('show');
+    }
+
+    function nextOral(){
+      oralIndex = (oralIndex + 1) % oralQuestions.length;
+      renderOral();
+    }
+
+    function renderList(){
+      const list = lists[listIndex];
+      document.getElementById('listTitle').textContent = list.title;
+
+      const wrap = document.getElementById('listContent');
+      wrap.innerHTML = '';
+
+      list.items.forEach(item => {
+        const span = document.createElement('span');
+        span.className = 'pill';
+        span.textContent = item;
+        wrap.appendChild(span);
+      });
+    }
+
+    function nextList(){
+      listIndex = (listIndex + 1) % lists.length;
+      renderList();
+    }
+
+    function prevList(){
+      listIndex = (listIndex - 1 + lists.length) % lists.length;
+      renderList();
+    }
+
+    function startFinal(){
+      finalIndex = 0;
+      finalScore = 0;
+      finalLocked = false;
+      openSection('final');
+      renderFinal();
+    }
+
+    function renderFinal(){
+      finalLocked = false;
+
+      if(finalIndex >= quizQuestions.length){
+        document.getElementById('finalCounter').textContent = 'Klart';
+        document.getElementById('finalQuestion').textContent = 'Slutprov klart';
+        document.getElementById('finalChoices').innerHTML = '';
+        document.getElementById('finalStatus').textContent = 'Resultat: ' + finalScore + ' av ' + quizQuestions.length;
+        document.getElementById('finalStatus').style.color = 'var(--blue)';
+        document.getElementById('finalScore').textContent = 'Poäng: ' + finalScore + ' av ' + quizQuestions.length;
+        return;
       }
 
-      answered.add(Array.from(document.querySelectorAll('.q[data-answer]')).indexOf(q));
-      updateProgress();
-    });
-  });
+      const q = quizQuestions[finalIndex];
+      document.getElementById('finalQuestion').textContent = q.q;
+      document.getElementById('finalCounter').textContent = (finalIndex + 1) + ' av ' + quizQuestions.length;
+      document.getElementById('finalStatus').textContent = '';
+      document.getElementById('finalScore').textContent = 'Poäng: ' + finalScore;
 
-  function toggleBox(button, cls){
-    const box = button.parentElement.querySelector('.' + cls);
+      const wrap = document.getElementById('finalChoices');
+      wrap.innerHTML = '';
 
-    if(box.style.display === 'block'){
-      box.style.display = 'none';
-    }else{
-      box.style.display = 'block';
+      q.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.textContent = choice;
+        btn.onclick = () => checkFinal(btn, choice, q.answer);
+        wrap.appendChild(btn);
+      });
     }
-  }
 
-  function gradeExam(){
-    const examQs = document.querySelectorAll('.exam-q[data-answer]');
-    let correct = 0;
+    function checkFinal(btn, choice, answer){
+      if(finalLocked){
+        return;
+      }
 
-    examQs.forEach(q => {
-      const correctText = q.dataset.answer;
-      const clickedWrong = q.querySelector('.choice.wrong');
-      const clickedCorrect = Array.from(q.querySelectorAll('.choice')).find(b => {
-        return b.classList.contains('correct') && b.textContent.trim() === correctText;
+      finalLocked = true;
+
+      const wrap = document.getElementById('finalChoices');
+      const status = document.getElementById('finalStatus');
+
+      wrap.querySelectorAll('button').forEach(b => {
+        b.disabled = true;
+
+        if(b.textContent === answer){
+          b.classList.add('correct');
+        }
       });
 
-      if(clickedCorrect && !clickedWrong){
-        correct++;
+      if(choice === answer){
+        finalScore++;
+        status.textContent = 'Rätt';
+        status.style.color = 'var(--green)';
+      }else{
+        btn.classList.add('wrong');
+        status.textContent = 'Fel. Rätt svar visas grönt.';
+        status.style.color = 'var(--red)';
       }
-    });
 
-    const t1 = document.getElementById('examText1').value.trim();
-    const t2 = document.getElementById('examText2').value.trim();
-
-    let textPoints = 0;
-
-    if(t1.length > 35){
-      textPoints++;
+      document.getElementById('finalScore').textContent = 'Poäng: ' + finalScore;
     }
 
-    if(t2.length > 35){
-      textPoints++;
+    function nextFinal(){
+      if(finalIndex >= quizQuestions.length){
+        startFinal();
+        return;
+      }
+
+      finalIndex++;
+      renderFinal();
     }
 
-    const total = examQs.length + 2;
-    const points = correct + textPoints;
-
-    const box = document.getElementById('scorebox');
-    box.style.display = 'block';
-
-    box.innerHTML =
-      '<h3>Resultat: ' + points + ' av ' + total + '</h3>' +
-      '<p>Flervalsfrågor: ' + correct + ' av ' + examQs.length + '</p>' +
-      '<p>Skrivsvar: ' + textPoints + ' av 2 möjliga. Skrivsvar bedöms bara enkelt här. Läs själv om svaret verkligen förklarar varför.</p>' +
-      '<h3>Facit till skrivsvaren</h3>' +
-      '<p><strong>Varför bor många i städer?</strong> För att det ofta finns fler jobb, skolor, affärer, vård, service och kommunikationer där.</p>' +
-      '<p><strong>Hållbart vattenbruk:</strong> Att använda vatten utan att förstöra naturen eller framtida möjligheter. Till exempel skydda dricksvatten och undvika överfiske.</p>' +
-      '<p><strong>Träna mer om:</strong> allt där du fick rött svar eller där skrivsvaret saknar ordet varför.</p>';
-  }
-
-  function resetExam(){
-    document.querySelectorAll('#slutprov .choice').forEach(b => {
-      b.classList.remove('correct','wrong');
-    });
-
-    document.getElementById('examText1').value = '';
-    document.getElementById('examText2').value = '';
-    document.getElementById('scorebox').style.display = 'none';
-  }
-
-  updateProgress();
-</script>
-
+    renderFlash();
+    renderQuiz();
+    renderOral();
+    renderList();
+  </script>
 </body>
 </html>
